@@ -1,0 +1,127 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(32px, 5vw, 72px) 0 clamp(56px, 7vw, 104px);
+  background:
+    radial-gradient(60% 70% at 85% 30%, var(--ns-hero-glow), transparent 70%),
+    radial-gradient(40% 50% at 5% 90%, var(--ns-hero-glow-2), transparent 70%);
+}
+
+/* Fine film grain over the hero, very faint */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--ns-grain);
+  opacity: var(--ns-grain-opacity);
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.title {
+  max-width: 14ch;
+  font-size: clamp(2.5rem, 1.4rem + 4.2vw, 4.5rem);
+}
+
+.word {
+  display: inline-block;
+}
+
+.dot {
+  display: inline-block;
+}
+
+/* The headline sharpens in from a blur. Opacity never starts at 0, so it is painted (and counted) at once. */
+:global(.motion-ready) .word {
+  animation: word-in 800ms var(--ns-ease-out) calc(80ms + var(--w) * 60ms) both;
+}
+
+:global(.motion-ready) .dot {
+  animation: dot-in 600ms var(--ns-ease-spring) 900ms both;
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0.25;
+    filter: blur(10px);
+    transform: translateY(0.18em);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes dot-in {
+  from {
+    transform: scale(0.2);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.lede {
+  max-width: 50ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 20px 24px;
+  margin-top: 6px;
+  padding-top: 26px;
+  border-top: 1px solid var(--ns-line);
+  list-style: none;
+}
+
+.visual {
+  position: relative;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .visual {
+    max-width: 520px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word,
+  .dot {
+    animation: none !important;
+  }
+}

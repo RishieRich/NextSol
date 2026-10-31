@@ -1,0 +1,241 @@
+/* Next Solutions theme: the token layer.
+   Every color, shadow, radius, font and motion value used by the site lives here.
+   Components reference these variables only. A hex value in a component is a bug.
+   Palette from Niket's live site and logo (slice 03): button blue #086AD8, ink #001D23,
+   logo navy and sky sampled from the logo by scripts/brand-assets.mjs.
+   Contrast of every text pair is checked by scripts/contrast.mjs. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --ns-bg: #f5f8fc;
+  --ns-surface: #ffffff;
+  --ns-surface-2: #edf3fb;
+  --ns-line: #d7e1ee;
+  --ns-line-strong: #b3c2d6;
+
+  /* Text */
+  --ns-text: #001d23;
+  --ns-text-2: #5e6778;
+  --ns-text-3: #5f6879;
+
+  /* Brand blue: primary action and identity (his button blue) */
+  --ns-blue: #086ad8;
+  --ns-blue-hover: #0656b0;
+  --ns-blue-ink: #ffffff;
+  --ns-blue-soft: #e1edfb;
+  --ns-blue-soft-text: #0656b0;
+  /* Blue for text and marks on dark bands: #086AD8 on ink is only 3.39:1 */
+  --ns-blue-on-dark: #4d9bf0;
+
+  /* Logo colors, sampled from the logo: circuit traces, light pulses, highlights */
+  --ns-logo-navy: #29419c;
+  --ns-logo-sky: #1890cd;
+  --ns-logo-sky-glow: rgba(24, 144, 205, 0.45);
+  --ns-trace: #b7c8e4;
+
+  /* Ink bands: dark sections and the footer (his heading and footer colour) */
+  --ns-navy: #001d23;
+  --ns-navy-2: #072c34;
+  --ns-navy-line: #18414a;
+  --ns-navy-text: #eef6f7;
+  --ns-navy-text-2: #a7bcc1;
+
+  /* Warm highlight: retired as an accent; kept only for the rare warm signal */
+  --ns-amber: #f2b23e;
+  --ns-amber-ink: #3a2600;
+
+  /* Status */
+  --ns-green: #177a55;
+  --ns-green-soft: #ddf2e8;
+  --ns-red: #b83232;
+  --ns-red-soft: #fbe4e4;
+
+  /* Document surfaces (invoice and report mock-ups stay paper-white in both modes) */
+  --ns-doc: #ffffff;
+  --ns-doc-text: #1a2433;
+  --ns-doc-muted: #6b7686;
+  --ns-doc-line: #e3e8ef;
+  --ns-doc-fill: #f3f6fa;
+  --ns-doc-accent: #086ad8;
+  --ns-doc-accent-ink: #ffffff;
+  --ns-doc-good: #177a55;
+  --ns-doc-good-soft: #ddf2e8;
+  --ns-doc-bad: #b83232;
+  --ns-doc-bad-soft: #fbe4e4;
+  --ns-doc-warn-soft: #fdf1d8;
+  --ns-slab: #001d23;
+
+  /* Elevation and glass */
+  --ns-shadow-sm: 0 1px 2px rgba(0, 29, 35, 0.06);
+  --ns-shadow-md: 0 2px 4px rgba(0, 29, 35, 0.05), 0 12px 32px rgba(0, 29, 35, 0.08);
+  --ns-shadow-lg: 0 4px 8px rgba(0, 29, 35, 0.06), 0 28px 60px rgba(0, 29, 35, 0.16);
+  --ns-shadow-blue: 0 10px 28px rgba(8, 106, 216, 0.28);
+  --ns-header-glass: rgba(245, 248, 252, 0.8);
+  --ns-glass: rgba(255, 255, 255, 0.72);
+  --ns-glass-line: rgba(255, 255, 255, 0.9);
+  --ns-overlay: rgba(0, 18, 22, 0.42);
+
+  /* Light effects: card spotlight, sheen sweep, emoji floor shadow */
+  --ns-spotlight: rgba(8, 106, 216, 0.1);
+  --ns-sheen: rgba(255, 255, 255, 0.55);
+  --ns-emoji-shadow: rgba(0, 29, 35, 0.28);
+  --ns-hero-glow: rgba(8, 106, 216, 0.14);
+  --ns-hero-glow-2: rgba(24, 144, 205, 0.12);
+
+  /* Paper grain for hero backgrounds only (his hero has a faint grain), drawn at 3% */
+  --ns-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --ns-grain-opacity: 0.03;
+
+  /* Shape: radius grows with the size of the thing */
+  --ns-r-xs: 6px;
+  --ns-r-sm: 10px;
+  --ns-r-md: 14px;
+  --ns-r-lg: 24px;
+  --ns-r-pill: 999px;
+
+  /* Type */
+  --ns-font: "Schibsted Grotesk Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ns-fs-xs: 0.8125rem;
+  --ns-fs-sm: 0.9375rem;
+  --ns-fs-base: 1.0625rem;
+  --ns-fs-lg: 1.25rem;
+  --ns-fs-xl: clamp(1.375rem, 1.1rem + 0.9vw, 1.625rem);
+  --ns-fs-2xl: clamp(1.75rem, 1.3rem + 1.6vw, 2.375rem);
+  --ns-fs-3xl: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+
+  /* Space and layout */
+  --ns-maxw: 1200px;
+  --ns-gutter: clamp(16px, 4vw, 40px);
+  --ns-section: clamp(64px, 9vw, 120px);
+  --ns-header-h: 80px;
+  --ns-header-h-small: 64px;
+  --ns-topbar-h: 40px;
+
+  /* Motion. src/lib/motion.ts mirrors these numbers for Motion variants; keep them equal. */
+  --ns-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ns-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ns-ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ns-dur-1: 160ms;
+  --ns-dur-2: 280ms;
+  --ns-dur-3: 520ms;
+  --ns-dur-4: 900ms;
+  --ns-dur-draw: 1200ms;
+  --ns-stagger: 75ms;
+  --ns-stagger-word: 40ms;
+  --ns-reveal-y: 20px;
+  --ns-float-y: 6px;
+  --ns-float-dur: 5s;
+  --ns-marquee-dur: 40s;
+  --ns-border-spin: 6s;
+}
+
+/* Dark mode follows the visitor's system setting. A data-theme attribute on <html>
+   ("light" or "dark") overrides it, ready for a theme switch later. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ns-bg: #00151a;
+    --ns-surface: #03222a;
+    --ns-surface-2: #072d36;
+    --ns-line: #123d47;
+    --ns-line-strong: #1d5260;
+    --ns-text: #eef6f7;
+    --ns-text-2: #b0c2c7;
+    --ns-text-3: #93a8ae;
+    --ns-blue: #4d9bf0;
+    --ns-blue-hover: #74b3f5;
+    --ns-blue-ink: #001d23;
+    --ns-blue-soft: #0b3452;
+    --ns-blue-soft-text: #a9cef8;
+    --ns-logo-navy: #7d93e6;
+    --ns-logo-sky: #3aaee8;
+    --ns-logo-sky-glow: rgba(58, 174, 232, 0.5);
+    --ns-trace: #1f4a5a;
+    --ns-navy: #000d10;
+    --ns-navy-2: #021a1f;
+    --ns-navy-line: #123a43;
+    --ns-slab: #0a3a56;
+    --ns-green: #4cc59a;
+    --ns-green-soft: #0f3a2c;
+    --ns-red: #f08a8a;
+    --ns-red-soft: #3d1717;
+    --ns-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --ns-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+    --ns-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.35), 0 28px 60px rgba(0, 0, 0, 0.5);
+    --ns-shadow-blue: 0 10px 28px rgba(77, 155, 240, 0.25);
+    --ns-header-glass: rgba(0, 21, 26, 0.8);
+    --ns-glass: rgba(3, 34, 42, 0.72);
+    --ns-glass-line: rgba(255, 255, 255, 0.08);
+    --ns-overlay: rgba(0, 0, 0, 0.55);
+    --ns-spotlight: rgba(77, 155, 240, 0.14);
+    --ns-sheen: rgba(255, 255, 255, 0.14);
+    --ns-emoji-shadow: rgba(0, 0, 0, 0.55);
+    --ns-hero-glow: rgba(77, 155, 240, 0.16);
+    --ns-hero-glow-2: rgba(58, 174, 232, 0.12);
+    --ns-grain-opacity: 0.05;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ns-bg: #00151a;
+  --ns-surface: #03222a;
+  --ns-surface-2: #072d36;
+  --ns-line: #123d47;
+  --ns-line-strong: #1d5260;
+  --ns-text: #eef6f7;
+  --ns-text-2: #b0c2c7;
+  --ns-text-3: #93a8ae;
+  --ns-blue: #4d9bf0;
+  --ns-blue-hover: #74b3f5;
+  --ns-blue-ink: #001d23;
+  --ns-blue-soft: #0b3452;
+  --ns-blue-soft-text: #a9cef8;
+  --ns-logo-navy: #7d93e6;
+  --ns-logo-sky: #3aaee8;
+  --ns-logo-sky-glow: rgba(58, 174, 232, 0.5);
+  --ns-trace: #1f4a5a;
+  --ns-navy: #000d10;
+  --ns-navy-2: #021a1f;
+  --ns-navy-line: #123a43;
+  --ns-slab: #0a3a56;
+  --ns-green: #4cc59a;
+  --ns-green-soft: #0f3a2c;
+  --ns-red: #f08a8a;
+  --ns-red-soft: #3d1717;
+  --ns-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ns-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --ns-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.35), 0 28px 60px rgba(0, 0, 0, 0.5);
+  --ns-shadow-blue: 0 10px 28px rgba(77, 155, 240, 0.25);
+  --ns-header-glass: rgba(0, 21, 26, 0.8);
+  --ns-glass: rgba(3, 34, 42, 0.72);
+  --ns-glass-line: rgba(255, 255, 255, 0.08);
+  --ns-overlay: rgba(0, 0, 0, 0.55);
+  --ns-spotlight: rgba(77, 155, 240, 0.14);
+  --ns-sheen: rgba(255, 255, 255, 0.14);
+  --ns-emoji-shadow: rgba(0, 0, 0, 0.55);
+  --ns-hero-glow: rgba(77, 155, 240, 0.16);
+  --ns-hero-glow-2: rgba(58, 174, 232, 0.12);
+  --ns-grain-opacity: 0.05;
+}
+
+/* Accessibility primitives: visible focus everywhere, motion off when the visitor asks. */
+:focus-visible {
+  outline: 3px solid var(--ns-blue);
+  outline-offset: 3px;
+  border-radius: var(--ns-r-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

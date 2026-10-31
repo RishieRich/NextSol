@@ -1,0 +1,454 @@
+/* The hero's sample invoice.
+   On load the customised version assembles piece by piece (.build).
+   The toggle then morphs it between plain Tally and the customised format with transitions.
+   Build animations use fill-mode "backwards" so, once played, mode styles take over cleanly. */
+
+.stage {
+  position: relative;
+  margin: 0;
+  padding: 56px 0 0 28px;
+}
+
+/* Ledger-paper dots behind everything */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 24px -24px -24px 0;
+  border-radius: var(--ns-r-lg);
+  background-image: radial-gradient(var(--ns-line-strong) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse at 60% 50%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 60% 50%, black 30%, transparent 75%);
+  z-index: 0;
+}
+
+/* Navy slab offset behind the paper */
+.stage::after {
+  content: "";
+  position: absolute;
+  top: 92px;
+  right: -14px;
+  bottom: 40px;
+  left: 56px;
+  border-radius: var(--ns-r-lg);
+  background: var(--ns-slab);
+  transform: rotate(2.5deg);
+  z-index: 0;
+}
+
+:global(.motion-ready) .stage::after {
+  animation: slab-in 900ms var(--ns-ease) 100ms backwards;
+}
+
+/* Segmented control */
+.toggle {
+  position: absolute;
+  top: 0;
+  left: 28px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-surface);
+  box-shadow: var(--ns-shadow-sm);
+}
+
+.toggle button {
+  position: relative;
+  z-index: 1;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--ns-r-xs);
+  background: transparent;
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--ns-dur-2) var(--ns-ease);
+}
+
+.toggle button[aria-pressed="true"] {
+  color: var(--ns-blue-ink);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--ns-r-xs);
+  background: var(--ns-blue);
+  transition: transform var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+.toggleThumb[data-mode="custom"] {
+  transform: translateX(100%);
+}
+
+/* The document */
+.paper {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  padding: 26px 26px 22px;
+  border-radius: var(--ns-r-md);
+  background: var(--ns-doc);
+  color: var(--ns-doc-text);
+  box-shadow: var(--ns-shadow-lg);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  transition: font-family 0s;
+}
+
+:global(.motion-ready) .paper {
+  animation: paper-in 700ms var(--ns-ease) backwards;
+}
+
+.paper[data-mode="standard"] {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.small {
+  color: var(--ns-doc-muted);
+  font-size: 0.75rem;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ns-doc-accent);
+  transition: border-color var(--ns-dur-3) var(--ns-ease);
+}
+
+.paper[data-mode="standard"] .top {
+  border-bottom-color: var(--ns-doc-line);
+}
+
+.seller {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sellerMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-doc-accent);
+  color: var(--ns-doc-accent-ink);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  transition:
+    width var(--ns-dur-3) var(--ns-ease),
+    margin var(--ns-dur-3) var(--ns-ease),
+    opacity var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+.paper[data-mode="standard"] .sellerMark {
+  width: 0;
+  margin-right: -12px;
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.sellerName {
+  color: var(--ns-doc-accent);
+  font-size: 0.9375rem;
+  font-weight: 760;
+  letter-spacing: -0.01em;
+  transition: color var(--ns-dur-3) var(--ns-ease);
+}
+
+.paper[data-mode="standard"] .sellerName {
+  color: var(--ns-doc-text);
+  font-weight: 700;
+}
+
+.meta {
+  text-align: right;
+}
+
+.docTitle {
+  color: var(--ns-doc-text);
+  font-size: 0.9375rem;
+  font-weight: 760;
+}
+
+.billTo {
+  display: flex;
+  flex-direction: column;
+  margin: 14px 0 12px;
+}
+
+/* Items */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 7px 8px;
+  text-align: right;
+  vertical-align: top;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+}
+
+.table thead tr {
+  background: var(--ns-doc-accent);
+  color: var(--ns-doc-accent-ink);
+  transition:
+    background-color var(--ns-dur-3) var(--ns-ease),
+    color var(--ns-dur-3) var(--ns-ease);
+}
+
+.table thead th {
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.paper:not([data-mode="standard"]) .table thead th:first-child {
+  padding-left: 8px;
+}
+
+.paper[data-mode="standard"] .table thead tr {
+  background: var(--ns-doc-fill);
+  color: var(--ns-doc-muted);
+}
+
+.table tbody td {
+  border-bottom: 1px solid var(--ns-doc-line);
+}
+
+.hsn {
+  display: block;
+  color: var(--ns-doc-muted);
+  font-size: 0.6875rem;
+}
+
+.bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: end;
+  margin-top: 14px;
+}
+
+.pay {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  max-width: 240px;
+}
+
+.payTitle {
+  font-weight: 650;
+}
+
+.qr {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  padding: 3px;
+  border: 1px solid var(--ns-doc-line);
+  border-radius: var(--ns-r-xs);
+  fill: var(--ns-doc-text);
+}
+
+.sums {
+  margin: 0;
+  min-width: 190px;
+}
+
+.sums div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 2px 0;
+}
+
+.sums dt {
+  color: var(--ns-doc-muted);
+}
+
+.sums dd {
+  margin: 0;
+}
+
+.sums .grand {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 2px solid var(--ns-doc-accent);
+  font-size: 0.9375rem;
+  font-weight: 760;
+  transition: border-color var(--ns-dur-3) var(--ns-ease);
+}
+
+.grand dt,
+.grand dd {
+  color: var(--ns-doc-accent);
+  transition: color var(--ns-dur-3) var(--ns-ease);
+}
+
+.paper[data-mode="standard"] .grand {
+  border-top-color: var(--ns-doc-line);
+}
+
+.paper[data-mode="standard"] .grand dt,
+.paper[data-mode="standard"] .grand dd {
+  color: var(--ns-doc-text);
+}
+
+.sign {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 18px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.signLine {
+  margin-top: 26px;
+  padding-top: 4px;
+  border-top: 1px solid var(--ns-doc-line);
+  color: var(--ns-doc-muted);
+  font-weight: 400;
+}
+
+/* Elements only the customised invoice has */
+.customOnly {
+  transition:
+    opacity var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-3) var(--ns-ease),
+    filter var(--ns-dur-2) var(--ns-ease);
+}
+
+.paper[data-mode="standard"] .customOnly {
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  filter: blur(2px);
+}
+
+.stamp {
+  position: absolute;
+  top: -14px;
+  right: -12px;
+  padding: 7px 14px;
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-amber);
+  color: var(--ns-amber-ink);
+  box-shadow: var(--ns-shadow-md);
+  font-size: 0.75rem;
+  font-weight: 750;
+  transform: rotate(6deg);
+  transition:
+    opacity var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+:global(.motion-ready) .stamp {
+  animation: stamp-in 620ms var(--ns-ease-spring) 1750ms backwards;
+}
+
+.paper[data-mode="standard"] .stamp {
+  opacity: 0;
+  transform: rotate(-8deg) scale(0.5);
+}
+
+.caption {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  margin-top: 18px;
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+}
+
+/* Load sequence */
+.build {
+}
+
+:global(.motion-ready) .build {
+  animation: build-in var(--ns-dur-3) var(--ns-ease) var(--d, 0ms) backwards;
+}
+
+@keyframes build-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+}
+
+@keyframes paper-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) rotate(-1.5deg);
+  }
+}
+
+@keyframes slab-in {
+  from {
+    opacity: 0;
+    transform: rotate(0deg) translate(-12px, -12px);
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(-20deg) scale(1.8);
+  }
+}
+
+@media (max-width: 560px) {
+  .stage {
+    padding-left: 0;
+  }
+
+  .stage::after {
+    left: 24px;
+    right: -8px;
+  }
+
+  .toggle {
+    left: 0;
+  }
+
+  .paper {
+    padding: 20px 16px 18px;
+  }
+
+  .bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .pay {
+    order: 2;
+    max-width: none;
+  }
+
+  .stamp {
+    right: -4px;
+  }
+}

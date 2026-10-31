@@ -1,0 +1,39 @@
+.section {
+  padding: var(--ns-section) 0;
+}
+
+.band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px 40px;
+  padding: clamp(32px, 5vw, 56px);
+  border-radius: var(--ns-r-lg);
+  background: var(--ns-blue);
+  color: var(--ns-blue-ink);
+}
+
+.title {
+  color: inherit;
+}
+
+.text {
+  margin-top: 10px;
+  opacity: 0.85;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.copy {
+  max-width: 62ch;
+}
+
+.link {
+  color: inherit;
+  font-weight: 650;
+}

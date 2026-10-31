@@ -1,0 +1,71 @@
+.section {
+  padding: var(--ns-section) 0 calc(var(--ns-section) * 0.6);
+}
+
+.label {
+  margin: 0 0 22px;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--ns-blue);
+  font-size: var(--ns-fs-sm);
+  font-weight: 650;
+  text-align: center;
+}
+
+.text {
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.visual {
+  color: var(--ns-text);
+  font-size: clamp(1.75rem, 1rem + 3vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.piece {
+  display: inline;
+  margin-right: 0.24em;
+}
+
+:global(.motion-ready) .piece {
+  opacity: var(--o, 1);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  margin: 0.08em 0;
+  padding: 0.04em 0.45em 0.04em 0.12em;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-surface);
+  box-shadow: var(--ns-shadow-sm);
+  color: var(--ns-blue);
+  text-decoration: none;
+  vertical-align: middle;
+  transition:
+    border-color var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-2) var(--ns-ease-spring);
+}
+
+.pill:hover {
+  border-color: var(--ns-blue);
+  transform: translateY(-2px);
+}
+
+.pillEmoji {
+  --size: 1.05em;
+}
+
+/* The server HTML carries the scroll value's starting opacity; reduced motion always shows the words at full strength. */
+@media (prefers-reduced-motion: reduce) {
+  :global(.motion-ready) .piece {
+    opacity: 1;
+  }
+}

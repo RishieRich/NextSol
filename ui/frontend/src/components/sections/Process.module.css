@@ -1,0 +1,100 @@
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.wrap {
+  position: relative;
+}
+
+/* The line joining the step numbers: a track, with the blue part scaled by --line (scroll progress) */
+.line {
+  position: absolute;
+  top: 21px;
+  left: 22px;
+  right: 22px;
+  height: 2px;
+  background: var(--ns-line);
+}
+
+.line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ns-blue);
+  transform-origin: left;
+}
+
+:global(.motion-ready) .line::after {
+  transform: scaleX(var(--line, 1));
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border: 2px solid var(--ns-blue);
+  border-radius: 50%;
+  background: var(--ns-bg);
+  color: var(--ns-blue);
+  font-weight: 750;
+}
+
+.step p {
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+}
+
+@media (max-width: 860px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-left: 64px;
+  }
+
+  .line {
+    top: 22px;
+    bottom: 22px;
+    left: 21px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .line::after {
+    transform-origin: top;
+  }
+
+  :global(.motion-ready) .line::after {
+    transform: scaleY(var(--line, 1));
+  }
+
+  .number {
+    position: absolute;
+    left: -64px;
+    top: 0;
+  }
+}
+
+/* Reduced motion: the line is simply complete (the server HTML may carry a partial scroll value). */
+@media (prefers-reduced-motion: reduce) {
+  :global(.motion-ready) .line::after {
+    transform: none;
+  }
+}

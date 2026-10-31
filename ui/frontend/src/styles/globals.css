@@ -1,0 +1,301 @@
+/* Base layer: reset, typography and the few layout helpers every page shares.
+   Colors come from theme.css only. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--ns-header-h) + 24px);
+}
+
+body {
+  margin: 0;
+  background: var(--ns-bg);
+  color: var(--ns-text);
+  font-family: var(--ns-font);
+  font-size: var(--ns-fs-base);
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--ns-text);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--ns-fs-3xl);
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+h2 {
+  font-size: var(--ns-fs-2xl);
+}
+
+h3 {
+  font-size: var(--ns-fs-lg);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+::selection {
+  background: var(--ns-blue-soft);
+  color: var(--ns-text);
+}
+
+/* Layout helpers */
+.container {
+  width: 100%;
+  max-width: calc(var(--ns-maxw) + var(--ns-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--ns-gutter);
+}
+
+.lede {
+  max-width: 62ch;
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-lg);
+  line-height: 1.55;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-blue);
+  color: var(--ns-blue-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--ns-dur-2) var(--ns-ease);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Route change: a 300 ms fade with a slight blur, once per navigation. Only when JS has run. */
+@keyframes ns-page-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+.motion-ready .page-enter {
+  animation: ns-page-in 300ms var(--ns-ease) both;
+}
+
+/* Niket's blue full stop at the end of main headings: a styled span, not an image. */
+.ns-dot {
+  color: var(--ns-blue);
+}
+
+/* ---------- Shared effects (global utility classes, used by many components) ---------- */
+
+/* Glass card with a pointer-following spotlight (--mx/--my from PointerEffects) and a sheen sweep on hover. */
+.fx-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-lg);
+  background: var(--ns-glass);
+  box-shadow: var(--ns-shadow-sm);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    border-color var(--ns-dur-2) var(--ns-ease),
+    box-shadow var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.fx-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), var(--ns-spotlight), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--ns-dur-2) var(--ns-ease);
+  pointer-events: none;
+}
+
+.fx-card::after {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  z-index: 2;
+  background: linear-gradient(105deg, transparent 42%, var(--ns-sheen) 50%, transparent 58%);
+  transform: translateX(-70%);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .fx-card:hover {
+    border-color: var(--ns-blue);
+    box-shadow: var(--ns-shadow-md);
+    transform: translateY(-4px);
+  }
+
+  .fx-card:hover::before {
+    opacity: 1;
+  }
+
+  .motion-ready .fx-card:hover::after {
+    transform: translateX(70%);
+    transition: transform 900ms var(--ns-ease-out);
+  }
+}
+
+/* Featured card: an animated conic gradient border, 6 s loop, paused off-screen ([data-loop]). */
+@property --ns-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.fx-border {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--ns-surface), var(--ns-surface)) padding-box,
+    conic-gradient(from var(--ns-angle), var(--ns-blue), var(--ns-logo-sky), var(--ns-logo-navy), var(--ns-blue)) border-box;
+  border-width: 1.5px;
+  animation: ns-spin var(--ns-border-spin) linear infinite;
+}
+
+@keyframes ns-spin {
+  to {
+    --ns-angle: 360deg;
+  }
+}
+
+/* Decorative loops run only while on screen: LoopController sets data-playing. */
+[data-loop]:not([data-playing="true"]),
+[data-loop]:not([data-playing="true"]) * {
+  animation-play-state: paused !important;
+}
+
+.save-data [data-loop],
+.save-data [data-loop] * {
+  animation: none !important;
+}
+
+/* Primary buttons: magnetic pull (--pull-x/--pull-y from PointerEffects) and a light shine on hover. */
+[data-magnetic] {
+  translate: var(--pull-x, 0px) var(--pull-y, 0px);
+  transition: translate var(--ns-dur-2) var(--ns-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-card:hover {
+    transform: none;
+  }
+
+  .fx-card::after {
+    display: none;
+  }
+
+  .fx-border {
+    animation: none;
+  }
+
+  [data-magnetic] {
+    translate: none;
+  }
+}
+
+/* Printing a tool page that holds a document (the invoice generator): only the document prints, on A4.
+   Everything that is neither the document, inside it, nor one of its ancestors is hidden. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  body:has([data-print-root]) {
+    background: var(--ns-doc);
+  }
+
+  body:has([data-print-root]) *:not([data-print-root]):not([data-print-root] *):not(:has([data-print-root])) {
+    display: none !important;
+  }
+
+  body:has([data-print-root]) *:has([data-print-root]) {
+    display: block !important;
+    position: static !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+    animation: none !important;
+  }
+}

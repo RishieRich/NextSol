@@ -1,0 +1,226 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.formPane {
+  min-width: 0;
+}
+
+.previewPane {
+  position: sticky;
+  top: calc(var(--ns-header-h) + 16px);
+  min-width: 0;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 14px;
+  list-style: none;
+}
+
+.line {
+  padding: 14px;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-surface-2);
+}
+
+.lineGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.remove {
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ns-red);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The document: paper-white in both modes, like the hero InvoiceDemo */
+.paper {
+  padding: 28px;
+  border-radius: var(--ns-r-md);
+  background: var(--ns-doc);
+  color: var(--ns-doc-text);
+  box-shadow: var(--ns-shadow-lg);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.small {
+  color: var(--ns-doc-muted);
+  font-size: 0.75rem;
+  white-space: pre-line;
+}
+
+.strong {
+  font-weight: 650;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--ns-doc-accent);
+}
+
+.sellerName {
+  color: var(--ns-doc-accent);
+  font-size: 1rem;
+  font-weight: 760;
+}
+
+.meta {
+  text-align: right;
+}
+
+.docTitle {
+  font-size: 0.9375rem;
+  font-weight: 760;
+}
+
+.parties {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 14px 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 7px 6px;
+  text-align: right;
+  vertical-align: top;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+}
+
+.table thead tr {
+  background: var(--ns-doc-fill);
+  color: var(--ns-doc-muted);
+}
+
+.table thead th {
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.table tbody td {
+  border-bottom: 1px solid var(--ns-doc-line);
+}
+
+.hsn {
+  display: block;
+  color: var(--ns-doc-muted);
+  font-size: 0.6875rem;
+}
+
+.sums {
+  max-width: 280px;
+  margin: 14px 0 0 auto;
+}
+
+.sums div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 2px 0;
+}
+
+.sums .pair {
+  display: block;
+  padding: 0;
+}
+
+.sums dt {
+  color: var(--ns-doc-muted);
+}
+
+.sums dd {
+  margin: 0;
+}
+
+.sums .grand {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 2px solid var(--ns-doc-accent);
+  font-size: 0.9375rem;
+  font-weight: 760;
+}
+
+.grand dt,
+.grand dd {
+  color: var(--ns-doc-accent);
+}
+
+.words {
+  margin: 12px 0 8px;
+  font-style: italic;
+}
+
+.sign {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 18px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.signLine {
+  margin-top: 26px;
+  padding-top: 4px;
+  border-top: 1px solid var(--ns-doc-line);
+  color: var(--ns-doc-muted);
+  font-weight: 400;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .previewPane {
+    position: static;
+  }
+}
+
+@media print {
+  .paper {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 10.5pt;
+  }
+}

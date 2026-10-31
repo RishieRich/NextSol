@@ -1,0 +1,33 @@
+.tool {
+  padding: clamp(32px, 4vw, 48px) 0 0;
+}
+
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.method {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: calc(780px + var(--ns-gutter) * 2);
+  margin-inline: 0;
+}
+
+.methodTitle {
+  font-size: var(--ns-fs-xl);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 1.3em;
+  color: var(--ns-text-2);
+}
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

@@ -1,0 +1,297 @@
+/* Shared form and result styles for every free tool. Field look follows EnquiryForm. */
+
+.card {
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-lg);
+  background: var(--ns-surface);
+  box-shadow: var(--ns-shadow-sm);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label,
+.legend {
+  color: var(--ns-text);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+}
+
+.legend {
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.optional,
+.hint {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+  font-weight: 400;
+}
+
+.input {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--ns-line-strong);
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-surface);
+  color: var(--ns-text);
+  font-size: var(--ns-fs-base);
+  transition:
+    border-color var(--ns-dur-1) var(--ns-ease),
+    box-shadow var(--ns-dur-2) var(--ns-ease);
+}
+
+.input:hover {
+  border-color: var(--ns-text-3);
+}
+
+.input:focus-visible {
+  border-color: var(--ns-blue);
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ns-blue-soft);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--ns-red);
+}
+
+.error {
+  color: var(--ns-red);
+  font-size: var(--ns-fs-sm);
+  font-weight: 560;
+}
+
+.error::before {
+  content: "! ";
+  font-weight: 800;
+}
+
+/* Segmented choices built from real radio inputs */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice {
+  position: relative;
+  display: inline-flex;
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.choice span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--ns-line-strong);
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-surface);
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+  transition:
+    background-color var(--ns-dur-1) var(--ns-ease),
+    border-color var(--ns-dur-1) var(--ns-ease),
+    color var(--ns-dur-1) var(--ns-ease);
+}
+
+.choice input:checked + span {
+  border-color: var(--ns-blue);
+  background: var(--ns-blue-soft);
+  color: var(--ns-blue-soft-text);
+}
+
+.choice input:focus-visible + span {
+  outline: 3px solid var(--ns-blue);
+  outline-offset: 3px;
+}
+
+.check {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--ns-blue);
+}
+
+.source {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+}
+
+.source a {
+  color: var(--ns-text-2);
+}
+
+/* Results */
+.result {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ns-line);
+}
+
+.resultBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+:global(.motion-ready) .resultBody {
+  animation: result-in var(--ns-dur-2) var(--ns-ease) backwards;
+}
+
+.answer {
+  color: var(--ns-text);
+  font-size: var(--ns-fs-xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.working {
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-base);
+}
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.figures div {
+  padding: 12px 14px;
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-surface-2);
+}
+
+.figures dt {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+  font-weight: 600;
+}
+
+.figures dd {
+  margin: 2px 0 0;
+  color: var(--ns-text);
+  font-weight: 700;
+}
+
+.empty {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-sm);
+}
+
+.notice {
+  padding: 14px 16px;
+  border-left: 3px solid var(--ns-blue);
+  border-radius: 0 var(--ns-r-sm) var(--ns-r-sm) 0;
+  background: var(--ns-surface-2);
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+}
+
+.notice a {
+  color: var(--ns-blue);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+
+.copied {
+  color: var(--ns-green);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+}
+
+.copyFailed {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-sm);
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+}
+
+.checklist li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: var(--ns-fs-sm);
+}
+
+.pass,
+.fail {
+  flex: none;
+  min-width: 52px;
+  padding: 2px 8px;
+  border-radius: var(--ns-r-pill);
+  font-size: var(--ns-fs-xs);
+  font-weight: 700;
+  text-align: center;
+}
+
+.pass {
+  background: var(--ns-green-soft);
+  color: var(--ns-green);
+}
+
+.fail {
+  background: var(--ns-red-soft);
+  color: var(--ns-red);
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+  }
+}

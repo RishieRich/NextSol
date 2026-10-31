@@ -1,0 +1,20 @@
+.invoice {
+  padding: var(--ns-section) 0 0;
+}
+
+.invoiceGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 32px 64px;
+  align-items: center;
+}
+
+.anchor {
+  scroll-margin-top: calc(var(--ns-header-h) + 16px);
+}
+
+@media (max-width: 960px) {
+  .invoiceGrid {
+    grid-template-columns: 1fr;
+  }
+}

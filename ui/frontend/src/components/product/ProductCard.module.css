@@ -1,0 +1,119 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 26px 24px 22px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.vendor {
+  padding: 4px 10px;
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-surface-2);
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-xs);
+  font-weight: 600;
+}
+
+.name {
+  font-size: var(--ns-fs-xl);
+  letter-spacing: -0.02em;
+}
+
+.oneLiner {
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+  line-height: 1.55;
+}
+
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  list-style: none;
+  font-size: var(--ns-fs-sm);
+}
+
+.bullets li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.bullets svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--ns-blue);
+}
+
+.referral {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px dashed var(--ns-line-strong);
+  border-radius: var(--ns-r-md);
+  font-size: var(--ns-fs-sm);
+}
+
+.code {
+  padding: 2px 8px;
+  border-radius: var(--ns-r-xs);
+  background: var(--ns-blue-soft);
+  color: var(--ns-blue-soft-text);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--ns-line);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: var(--ns-blue);
+  font-size: var(--ns-fs-sm);
+  font-weight: 680;
+  text-decoration: none;
+}
+
+.link svg {
+  transition: transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.link:hover svg {
+  transform: translateX(3px);
+}
+
+/* The whole card is clickable through its link */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.referral {
+  position: relative;
+  z-index: 3;
+}

@@ -1,0 +1,307 @@
+/* Hero circuit network. Geometry: a 600 x 540 box; HTML chips are placed in % of it.
+   All load and loop animation is CSS, gated by .motion-ready; loops pause off-screen via [data-loop]. */
+
+.network {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 600 / 540;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+.glow {
+  position: absolute;
+  inset: 8% 6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--ns-hero-glow), transparent),
+    radial-gradient(closest-side at 70% 30%, var(--ns-hero-glow-2), transparent);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* Parallax layers: the board moves least, chips more (12 px at most) */
+.svg,
+.core {
+  translate: calc(var(--px) * -10px) calc(var(--py) * -10px);
+  transition: translate 700ms var(--ns-ease-out);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.grid circle {
+  fill: var(--ns-line-strong);
+}
+
+.trace {
+  fill: none;
+  stroke: var(--ns-trace);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition:
+    stroke var(--ns-dur-2) var(--ns-ease),
+    stroke-width var(--ns-dur-2) var(--ns-ease);
+}
+
+.branch {
+  stroke-width: 2;
+}
+
+.node {
+  fill: var(--ns-surface);
+  stroke: var(--ns-logo-sky);
+  stroke-width: 2;
+}
+
+/* Sky-blue light pulse: a short dash that travels the trace, invisible at rest */
+.pulse {
+  fill: none;
+  stroke: var(--ns-logo-sky);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.07 1.5;
+  stroke-dashoffset: 0.07;
+  filter: drop-shadow(0 0 4px var(--ns-logo-sky-glow));
+}
+
+/* Central chip carrying the logo's N */
+.core {
+  position: absolute;
+  left: 39%;
+  top: 49.26%;
+  width: 22%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 22%;
+  background: var(--ns-surface);
+  border: 1px solid var(--ns-line);
+  box-shadow: var(--ns-shadow-lg);
+}
+
+.coreRing {
+  position: absolute;
+  inset: -7%;
+  border-radius: 26%;
+  border: 1.5px dashed var(--ns-logo-sky);
+  opacity: 0.45;
+}
+
+.coreMark {
+  width: auto;
+  height: 72%;
+}
+
+.chips {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+}
+
+.chipItem {
+  position: absolute;
+  width: 17%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  translate: calc(var(--px) * 24px * var(--depth)) calc(var(--py) * 24px * var(--depth));
+  transition: translate 700ms var(--ns-ease-out);
+}
+
+.chip {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 26%;
+  color: var(--ns-text);
+  text-decoration: none;
+  transition: transform var(--ns-dur-2) var(--ns-ease-spring);
+}
+
+.chipFace {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 26%;
+  background: var(--ns-glass);
+  border: 1px solid var(--ns-glass-line);
+  box-shadow: var(--ns-shadow-md);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    border-color var(--ns-dur-2) var(--ns-ease),
+    box-shadow var(--ns-dur-2) var(--ns-ease);
+}
+
+.chipEmoji {
+  --size: 9.5cqw;
+}
+
+/* The name: shown on hover and focus where there is a mouse, always on touch screens */
+.chipLabel {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  padding: 4px 10px;
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-navy);
+  color: var(--ns-navy-text);
+  font-size: var(--ns-fs-xs);
+  font-weight: 650;
+  white-space: nowrap;
+  transform: translate(-50%, -4px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  transform: translateY(-6px) scale(1.06);
+}
+
+.chip:hover .chipFace,
+.chip:focus-visible .chipFace {
+  border-color: var(--ns-logo-sky);
+  box-shadow: var(--ns-shadow-blue);
+}
+
+.chip:hover .chipLabel,
+.chip:focus-visible .chipLabel {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (hover: none) {
+  .chipLabel {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    background: var(--ns-surface);
+    color: var(--ns-text);
+    border: 1px solid var(--ns-line);
+  }
+}
+
+/* The hovered chip's trace lights up */
+.network[data-active="0"] .traceGroup[data-index="0"] .trace,
+.network[data-active="1"] .traceGroup[data-index="1"] .trace,
+.network[data-active="2"] .traceGroup[data-index="2"] .trace,
+.network[data-active="3"] .traceGroup[data-index="3"] .trace,
+.network[data-active="4"] .traceGroup[data-index="4"] .trace,
+.network[data-active="5"] .traceGroup[data-index="5"] .trace {
+  stroke: var(--ns-logo-sky);
+  stroke-width: 3.5;
+}
+
+/* ---------- Load sequence and loops (only once JS has marked the page motion-ready) ---------- */
+
+:global(.motion-ready) .core {
+  animation: core-in 700ms var(--ns-ease-spring) both;
+}
+
+:global(.motion-ready) .trace {
+  animation: trace-draw 650ms var(--ns-ease-out) calc(220ms + var(--i) * 80ms) both;
+}
+
+:global(.motion-ready) .node {
+  animation: pop 420ms var(--ns-ease-spring) calc(700ms + var(--i) * 80ms) both;
+}
+
+:global(.motion-ready) .chipFace {
+  animation: pop 560ms var(--ns-ease-spring) calc(620ms + var(--i) * 90ms) both;
+}
+
+:global(.motion-ready) .pulse {
+  animation: pulse var(--pulse-dur, 4s) linear calc(1.6s + var(--i) * 0.65s) infinite;
+}
+
+:global(.save-data) .pulse {
+  animation: none;
+}
+
+@keyframes trace-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.node {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes core-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    stroke-dashoffset: 0.07;
+  }
+  32%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg,
+  .core,
+  .chipItem {
+    translate: none;
+  }
+
+  .pulse {
+    display: none;
+  }
+
+  .trace,
+  .node,
+  .core,
+  .chipFace {
+    animation: none !important;
+  }
+
+  .chip:hover,
+  .chip:focus-visible {
+    transform: none;
+  }
+}

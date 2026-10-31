@@ -1,0 +1,8 @@
+.section {
+  padding: var(--ns-section) 0;
+  overflow: hidden;
+}
+
+.tint {
+  background: var(--ns-surface-2);
+}

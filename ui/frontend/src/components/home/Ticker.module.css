@@ -1,0 +1,54 @@
+.ticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 6px 16px 6px 6px;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-surface);
+  box-shadow: var(--ns-shadow-sm);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.lead {
+  padding: 2px 12px;
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-blue);
+  color: var(--ns-blue-ink);
+  font-weight: 700;
+}
+
+/* One line tall; the reel scrolls inside it */
+.window {
+  position: relative;
+  display: inline-block;
+  height: 1.5em;
+  overflow: hidden;
+  color: var(--ns-blue);
+  font-weight: 700;
+}
+
+.reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 640ms var(--ns-ease-spring);
+}
+
+.reel[data-snap="true"] {
+  transition: none;
+}
+
+.item {
+  display: block;
+  height: 1.5em;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    transition: none;
+  }
+}

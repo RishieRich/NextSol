@@ -1,0 +1,57 @@
+.intro {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(48px, 7vw, 96px) 0 0;
+}
+
+.glow {
+  position: absolute;
+  inset: 0 0 -40%;
+  z-index: -1;
+  background: radial-gradient(40% 60% at 85% 20%, var(--ns-hero-glow), transparent 70%);
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.title {
+  max-width: 18ch;
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+}
+
+/* The h1 is visible at first paint; it only sharpens in from a slight blur */
+:global(.motion-ready) .title {
+  animation: intro-in 700ms var(--ns-ease-out) both;
+}
+
+:global(.motion-ready) .lede {
+  animation: intro-in 700ms var(--ns-ease-out) 120ms both;
+}
+
+@keyframes intro-in {
+  from {
+    opacity: 0.3;
+    filter: blur(8px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+.extra {
+  margin-top: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .lede {
+    animation: none !important;
+  }
+}

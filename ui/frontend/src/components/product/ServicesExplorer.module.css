@@ -1,0 +1,75 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.chip {
+  position: relative;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid var(--ns-line-strong);
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-surface);
+  color: var(--ns-text);
+  font: inherit;
+  font-size: var(--ns-fs-sm);
+  font-weight: 620;
+  cursor: pointer;
+  transition: border-color var(--ns-dur-1) var(--ns-ease);
+}
+
+.chip:hover {
+  border-color: var(--ns-blue);
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--ns-blue);
+  color: var(--ns-blue-ink);
+}
+
+/* The active pill background slides between chips (Motion layoutId) */
+.chipBg {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  background: var(--ns-blue);
+}
+
+.chipLabel {
+  position: relative;
+}
+
+.count {
+  margin-left: 4px;
+  opacity: 0.75;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+}
+
+.item {
+  scroll-margin-top: calc(var(--ns-header-h) + 24px);
+}
+
+.item > * {
+  height: 100%;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

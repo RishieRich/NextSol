@@ -1,0 +1,99 @@
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+}
+
+/* The line through the markers */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ns-blue), var(--ns-logo-sky));
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  border: 2px solid var(--ns-blue);
+  border-radius: 50%;
+  background: var(--ns-surface);
+}
+
+.when {
+  color: var(--ns-blue);
+  font-size: var(--ns-fs-sm);
+  font-weight: 700;
+}
+
+.body {
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+}
+
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+}
+
+.value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.value p {
+  color: var(--ns-text-2);
+}
+
+@media (max-width: 960px) {
+  .timeline {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-left: 76px;
+  }
+
+  .timeline::before {
+    top: 28px;
+    bottom: 28px;
+    left: 27px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--ns-blue), var(--ns-logo-sky));
+  }
+
+  .marker {
+    position: absolute;
+    left: -76px;
+    top: 0;
+  }
+
+  .values {
+    grid-template-columns: 1fr;
+  }
+}

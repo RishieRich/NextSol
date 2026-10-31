@@ -1,0 +1,135 @@
+.button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px solid transparent;
+  border-radius: var(--ns-r-sm);
+  font-weight: 620;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--ns-dur-1) var(--ns-ease),
+    border-color var(--ns-dur-1) var(--ns-ease),
+    color var(--ns-dur-1) var(--ns-ease),
+    transform var(--ns-dur-1) var(--ns-ease),
+    box-shadow var(--ns-dur-2) var(--ns-ease),
+    translate var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.button:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.iconEnd {
+  transition: transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.button:hover .iconEnd {
+  transform: translateX(3px);
+}
+
+.sm {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: var(--ns-fs-xs);
+}
+
+.md {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: var(--ns-fs-sm);
+}
+
+.lg {
+  min-height: 54px;
+  padding: 0 24px;
+  font-size: var(--ns-fs-base);
+}
+
+.primary {
+  background: var(--ns-blue);
+  color: var(--ns-blue-ink);
+  box-shadow: var(--ns-shadow-sm);
+}
+
+.primary:hover {
+  background: var(--ns-blue-hover);
+  box-shadow: var(--ns-shadow-blue);
+}
+
+/* Shine sweep across primary buttons on hover */
+.primary::after,
+.onDark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, var(--ns-sheen) 50%, transparent 70%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .primary:hover::after,
+  .onDark:hover::after {
+    transform: translateX(110%);
+    transition: transform 700ms var(--ns-ease-out);
+  }
+}
+
+.secondary {
+  background: var(--ns-surface);
+  border-color: var(--ns-line-strong);
+  color: var(--ns-text);
+}
+
+.secondary:hover {
+  border-color: var(--ns-blue);
+  color: var(--ns-blue);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ns-blue);
+  padding-inline: 4px;
+}
+
+.ghost:hover {
+  color: var(--ns-blue-hover);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.onDark {
+  background: var(--ns-navy-text);
+  color: var(--ns-navy);
+}
+
+.onDark:hover {
+  background: var(--ns-surface);
+}
+
+/* For use on a solid brand-colored band: inherits the band's text color */
+.outlineOnColor {
+  background: transparent;
+  border-color: currentColor;
+  color: inherit;
+}
+
+.outlineOnColor:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary::after,
+  .onDark::after {
+    display: none;
+  }
+}

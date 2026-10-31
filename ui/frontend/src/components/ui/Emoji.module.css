@@ -1,0 +1,82 @@
+/* The "reflective" 3D emoji: floor shadow, gentle float, and a tilt toward the pointer on card hover
+   (driven by --tilt-x / --tilt-y set by PointerEffects on the nearest [data-spotlight] card). */
+
+.emoji {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--size);
+  height: calc(var(--size) * 1.12);
+  perspective: 400px;
+}
+
+.img {
+  position: relative;
+  z-index: 1;
+  width: var(--size);
+  height: var(--size);
+  align-self: start;
+  user-select: none;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+.shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 62%;
+  height: 12%;
+  border-radius: 50%;
+  background: var(--ns-emoji-shadow);
+  filter: blur(4px);
+  opacity: 0.55;
+  transform: translateX(-50%);
+}
+
+:global(.motion-ready) .float .img {
+  animation: emoji-float var(--float-dur, var(--ns-float-dur)) ease-in-out var(--float-delay, 0s) infinite;
+}
+
+:global(.motion-ready) .float .shadow {
+  animation: emoji-shadow var(--float-dur, var(--ns-float-dur)) ease-in-out var(--float-delay, 0s) infinite;
+}
+
+:global(.save-data) .float .img,
+:global(.save-data) .float .shadow {
+  animation: none;
+}
+
+@keyframes emoji-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 calc(var(--ns-float-y) * -1);
+  }
+}
+
+@keyframes emoji-shadow {
+  0%,
+  100% {
+    opacity: 0.55;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.35;
+    scale: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float .img,
+  .float .shadow {
+    animation: none !important;
+  }
+
+  .img {
+    transform: none;
+  }
+}

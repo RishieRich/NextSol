@@ -1,0 +1,175 @@
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+/* Vertical tab list with a sliding indicator */
+.tabs {
+  --tab-h: 56px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--ns-line);
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 2px;
+  height: var(--tab-h);
+  background: var(--ns-blue);
+  transform: translateY(calc(var(--index) * var(--tab-h)));
+  transition: transform var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+.tab {
+  height: var(--tab-h);
+  padding: 0 20px;
+  border: 0;
+  background: transparent;
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-base);
+  font-weight: 560;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color var(--ns-dur-1) var(--ns-ease),
+    background-color var(--ns-dur-1) var(--ns-ease);
+}
+
+.tab:hover {
+  color: var(--ns-text);
+  background: color-mix(in srgb, var(--ns-blue) 6%, transparent);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--ns-blue);
+  font-weight: 680;
+}
+
+.panel {
+  min-height: 420px;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-lg);
+  background: var(--ns-surface-2);
+}
+
+.panelInner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(24px, 3vw, 40px);
+  align-items: center;
+}
+
+:global(.motion-ready) .panelInner {
+  animation: swap-in var(--ns-dur-3) var(--ns-ease) backwards;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.copy h3 {
+  font-size: var(--ns-fs-xl);
+}
+
+.beforeAfter {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
+
+.beforeAfter dt {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+  font-weight: 650;
+}
+
+.beforeAfter dd {
+  margin: 2px 0 0;
+  color: var(--ns-text-2);
+}
+
+.beforeAfter div:last-child dd {
+  color: var(--ns-text);
+  font-weight: 560;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sample {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+}
+
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .panelInner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Phones: tabs become a horizontal, scrollable strip */
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    flex-direction: row;
+    gap: 8px;
+    margin-inline: calc(var(--ns-gutter) * -1);
+    padding: 2px var(--ns-gutter) 6px;
+    overflow-x: auto;
+    border-left: 0;
+    scrollbar-width: none;
+  }
+
+  .indicator {
+    display: none;
+  }
+
+  .tab {
+    flex: none;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--ns-line-strong);
+    border-radius: var(--ns-r-pill);
+    background: var(--ns-surface);
+    font-size: var(--ns-fs-sm);
+  }
+
+  .tab[aria-selected="true"] {
+    border-color: var(--ns-blue);
+    background: var(--ns-blue);
+    color: var(--ns-blue-ink);
+  }
+
+  .panel {
+    min-height: 0;
+    padding: 20px;
+  }
+}

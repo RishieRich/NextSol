@@ -1,0 +1,81 @@
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 6vw, 88px);
+  align-items: center;
+}
+
+.photoWrap {
+  position: relative;
+  max-width: 440px;
+}
+
+.photo {
+  overflow: hidden;
+  border-radius: calc(var(--ns-r-lg) * 1.4);
+  box-shadow: var(--ns-shadow-lg);
+}
+
+.photo img {
+  width: 100%;
+  height: auto;
+}
+
+.badge {
+  position: absolute;
+  right: -16px;
+  bottom: 28px;
+  padding: 12px 18px;
+  border-radius: var(--ns-r-md);
+  background: var(--ns-blue);
+  color: var(--ns-blue-ink);
+  box-shadow: var(--ns-shadow-blue);
+  font-size: var(--ns-fs-sm);
+  font-weight: 600;
+}
+
+.badge strong {
+  display: block;
+  font-size: var(--ns-fs-xl);
+  line-height: 1.1;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.copy > :first-child {
+  margin-bottom: 0;
+}
+
+.body {
+  max-width: 54ch;
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-lg);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photoWrap {
+    max-width: 360px;
+  }
+
+  .badge {
+    right: 12px;
+  }
+
+  /* Parallax is a desktop effect */
+  .photo {
+    transform: none !important;
+  }
+}

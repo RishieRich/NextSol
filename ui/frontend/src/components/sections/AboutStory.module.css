@@ -1,0 +1,109 @@
+.section {
+  padding: clamp(40px, 5vw, 72px) 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 6vw, 88px);
+  align-items: center;
+}
+
+.portrait {
+  margin: 0;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ns-r-lg);
+  box-shadow: var(--ns-shadow-lg);
+}
+
+:global(.motion-ready) .frame {
+  animation: frame-in 900ms var(--ns-ease) backwards;
+}
+
+.frame img {
+  width: 100%;
+  height: auto;
+}
+
+/* A thin brand edge along the bottom of the photo */
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 8px;
+  background: var(--ns-blue);
+}
+
+.portrait figcaption {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
+.portrait figcaption span {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-sm);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.copy p {
+  max-width: 62ch;
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-lg);
+  line-height: 1.6;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 32px;
+  margin: 14px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--ns-line);
+}
+
+.facts dt {
+  color: var(--ns-text-3);
+  font-size: var(--ns-fs-xs);
+}
+
+.facts dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+@keyframes frame-in {
+  from {
+    opacity: 0;
+    clip-path: inset(12% 12% 12% 12% round var(--ns-r-lg));
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round var(--ns-r-lg));
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 520px) {
+  .facts {
+    grid-template-columns: 1fr;
+  }
+}

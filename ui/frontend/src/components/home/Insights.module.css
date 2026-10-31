@@ -1,0 +1,393 @@
+.section {
+  padding: var(--ns-section) 0 0;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 26px;
+}
+
+.tileWide {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+}
+
+.tileText {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 34ch;
+}
+
+.tileText p {
+  color: var(--ns-text-2);
+  font-size: var(--ns-fs-sm);
+}
+
+/* ---------- Barcode scan demo ---------- */
+.scanDemo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.barcode {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 18px 10px;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-md);
+  background: var(--ns-surface);
+}
+
+.bars {
+  display: block;
+  height: 70px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ns-text) 0 2px,
+    transparent 2px 4px,
+    var(--ns-text) 4px 7px,
+    transparent 7px 9px,
+    var(--ns-text) 9px 10px,
+    transparent 10px 13px
+  );
+}
+
+.code {
+  display: block;
+  margin-top: 6px;
+  color: var(--ns-text-2);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: var(--ns-fs-xs);
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+.laser {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 18px;
+  height: 2px;
+  background: var(--ns-red);
+  box-shadow: 0 0 10px 2px var(--ns-red);
+  opacity: 0;
+}
+
+.voucherRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--ns-r-sm);
+  background: var(--ns-blue-soft);
+  color: var(--ns-blue-soft-text);
+  font-size: var(--ns-fs-sm);
+  font-weight: 650;
+}
+
+:global(.motion-ready) [data-play] .voucherRow {
+  clip-path: inset(0 100% 0 0);
+}
+
+:global(.motion-ready) [data-play="true"] .laser {
+  animation: laser 1100ms var(--ns-ease) 200ms both;
+}
+
+:global(.motion-ready) [data-play="true"] .voucherRow {
+  animation: fill-row 700ms var(--ns-ease-out) 1250ms both;
+}
+
+@keyframes laser {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(68px);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fill-row {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ---------- GST split demo ---------- */
+.gstDemo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.split {
+  display: flex;
+  gap: 3px;
+  height: 18px;
+  overflow: hidden;
+  border-radius: var(--ns-r-pill);
+}
+
+.split > span {
+  flex: 0 0 var(--share);
+  border-radius: 3px;
+  transform-origin: left;
+}
+
+.base,
+.keyBase {
+  background: var(--ns-blue);
+}
+
+.cgst,
+.keyCgst {
+  background: var(--ns-logo-sky);
+}
+
+.sgst,
+.keySgst {
+  background: var(--ns-logo-navy);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--ns-fs-xs);
+  font-weight: 600;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+:global(.motion-ready) [data-play] .split > span {
+  transform: scaleX(0);
+}
+
+:global(.motion-ready) [data-play="true"] .split > span {
+  animation: grow 700ms var(--ns-ease-out) both;
+}
+
+:global(.motion-ready) [data-play="true"] .split > .cgst {
+  animation-delay: 550ms;
+}
+
+:global(.motion-ready) [data-play="true"] .split > .sgst {
+  animation-delay: 850ms;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ---------- Sync demo ---------- */
+.syncDemo {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-r-md);
+  background: var(--ns-surface);
+  font-size: var(--ns-fs-xs);
+  font-weight: 650;
+  text-align: center;
+}
+
+.arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 48px;
+}
+
+.arrowRight,
+.arrowLeft {
+  position: relative;
+  height: 2px;
+  background: var(--ns-line-strong);
+}
+
+.arrowRight::after,
+.arrowLeft::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ns-logo-sky);
+  box-shadow: 0 0 8px var(--ns-logo-sky-glow);
+  opacity: 0;
+}
+
+.arrowRight::after {
+  left: 0;
+}
+
+.arrowLeft::after {
+  right: 0;
+}
+
+/* Data pulses travel both ways a few times, then rest */
+:global(.motion-ready) [data-play="true"] .arrowRight::after {
+  animation: travel-right 1200ms var(--ns-ease) 3 both;
+}
+
+:global(.motion-ready) [data-play="true"] .arrowLeft::after {
+  animation: travel-left 1200ms var(--ns-ease) 600ms 3 both;
+}
+
+@keyframes travel-right {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes travel-left {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+/* ---------- Link tile ---------- */
+.cta {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--ns-text);
+  text-decoration: none;
+}
+
+.ctaTitle {
+  font-size: var(--ns-fs-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.ctaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  color: var(--ns-blue);
+  font-size: var(--ns-fs-sm);
+  font-weight: 680;
+  white-space: nowrap;
+}
+
+@media (max-width: 960px) {
+  .bento {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tileWide,
+  .cta {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .bento {
+    grid-template-columns: 1fr;
+  }
+
+  .tileWide,
+  .cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scanDemo {
+    width: 100%;
+  }
+
+  .ctaLink {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-play] .voucherRow,
+  [data-play] .split > span {
+    clip-path: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  [data-play] .laser,
+  [data-play] .arrowRight::after,
+  [data-play] .arrowLeft::after {
+    animation: none !important;
+  }
+}
