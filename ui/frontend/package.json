@@ -5,7 +5,7 @@
   "description": "Website for Next Solutions, Vapi: Tally sales, customisation and support.",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node ../../scripts/fix-export-segments.mjs",
+    "build": "next build && node scripts/fix-export-segments.mjs",
     "start": "npx serve out",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

@@ -14,7 +14,7 @@ import { readdir, rename, rm, stat } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const outDir = process.argv[2] ?? fileURLToPath(new URL("../ui/frontend/out", import.meta.url));
+const outDir = process.argv[2] ?? fileURLToPath(new URL("../out", import.meta.url));
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
