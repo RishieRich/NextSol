@@ -18,6 +18,7 @@ import { siteDescription } from "@/content/home";
 import { config } from "@/lib/config";
 import { MOTION_READY_SCRIPT } from "@/lib/motionReady";
 import { localBusinessJsonLd } from "@/lib/seo";
+import { THEME_SCRIPT } from "@/lib/theme";
 import { browserThemeColor } from "@/styles/theme";
 
 export const metadata: Metadata = {
@@ -43,6 +44,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // The inline script adds classes to <html> before React hydrates; suppressHydrationWarning keeps them.
     <html lang="en-IN" suppressHydrationWarning>
       <head>
+        {/* Runs before first paint: the stored light/dark choice, so a reload never flashes the wrong theme. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         {/* Runs before first paint: hidden starting states apply only once this has run (no JS, no hiding). */}
         <script dangerouslySetInnerHTML={{ __html: MOTION_READY_SCRIPT }} />
       </head>

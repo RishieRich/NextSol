@@ -22,8 +22,12 @@ Enquiry: EnquiryForm ─► domain/enquiry.buildEnquiry ─► whatsappUrl ─�
 | Silver or Gold rule | `domain/licence.ts` | LicenceAdvisor |
 | Enquiry validation and message | `domain/enquiry.ts` | EnquiryForm |
 | Invoice and report arithmetic | `domain/invoice.ts`, `domain/reports.ts` | InvoiceDemo, CustomisationPreviews |
-| Colors, type, motion | `styles/theme.css` | every CSS module |
-| Logo | `content/brand.ts`, `components/brand/Logo.tsx` | Header, Footer |
+| Every product: name, emoji, features, prices with sources, related | `content/products.ts` | product pages, services index, sliders, mega-menu, quick guide |
+| Quick guide decision tree | `domain/guide.ts` | Guide |
+| Tool arithmetic (GST, GSTIN, MSME interest, amount in words) | `domain/gst.ts`, `gstin.ts`, `msme.ts`, `words.ts` | tool pages |
+| Colors (light and dark), type, motion tokens | `styles/theme.css` (motion numbers mirrored in `lib/motion.ts`) | every CSS module, Motion variants |
+| Light / dark choice | `lib/theme.ts` (pre-paint script, `data-theme` on `<html>`, `localStorage` key `ns-theme`) | ThemeToggle, layout |
+| Logo | `content/brand.ts`, `components/brand/Logo.tsx` | Header, Footer, hero network |
 | Site URL | `lib/config.ts` | metadata, sitemap, robots, JSON-LD |
 
 ## Optional providers
@@ -35,7 +39,7 @@ Enquiry: EnquiryForm ─► domain/enquiry.buildEnquiry ─► whatsappUrl ─�
 
 ## History model
 
-None. The site stores nothing. Content history is the git history of `src/content/`.
+None on any server. The visitor's own browser keeps only their light/dark choice and the invoice generator's draft. Content history is the git history of `src/content/`.
 
 ## Operations
 

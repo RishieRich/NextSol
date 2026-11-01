@@ -6,6 +6,7 @@ import { useRef } from "react";
 
 import { Emoji } from "@/components/ui/Emoji";
 import { statement } from "@/content/home";
+import { motionTokens } from "@/lib/motion";
 import styles from "./Statement.module.css";
 
 type Piece = (typeof statement)[number];
@@ -19,7 +20,7 @@ const pieces: Split[] = statement.flatMap((piece, i): Split[] =>
 function Word({ progress, index, still, children }: { progress: MotionValue<number>; index: number; still: boolean; children: React.ReactNode }) {
   const start = index / pieces.length;
   const end = start + 1.5 / pieces.length;
-  const opacity = useTransform(progress, [start, end], [0.25, 1]);
+  const opacity = useTransform(progress, [start, end], [motionTokens.dimText, 1]);
   return (
     // A CSS variable, applied only under .motion-ready: without JavaScript the words stay fully opaque.
     <m.span className={styles.piece} style={still ? undefined : ({ "--o": opacity } as unknown as MotionStyle)}>
@@ -29,8 +30,8 @@ function Word({ progress, index, still, children }: { progress: MotionValue<numb
 }
 
 /**
- * His `// services //` sentence as a scroll-linked reveal: words brighten from 25% to 100% opacity
- * as the section scrolls through the viewport. Server HTML is fully opaque (the motion value only
+ * His `// services //` sentence as a scroll-linked reveal: words brighten from 70% to 100% opacity
+ * as the section scrolls through the viewport (70% is the floor that keeps the dim words at AA contrast). Server HTML is fully opaque (the motion value only
  * takes over after hydration); under reduced motion it stays fully opaque. The words are the real text.
  */
 export function Statement() {

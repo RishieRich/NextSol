@@ -132,7 +132,8 @@
 }
 
 /* Dark mode follows the visitor's system setting. A data-theme attribute on <html>
-   ("light" or "dark") overrides it, ready for a theme switch later. */
+   ("light" or "dark"), set by the header switch (src/lib/theme.ts), overrides it.
+   The two dark blocks below must stay identical. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;

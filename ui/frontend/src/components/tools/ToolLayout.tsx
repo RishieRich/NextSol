@@ -23,19 +23,21 @@ export function ToolLayout({ tool, sources, children }: { tool: Tool; sources: S
       </section>
 
       <section className={styles.section} aria-labelledby="method-title">
-        <div className={`container ${styles.method}`}>
-          <h2 id="method-title" className={styles.methodTitle}>
-            How this is calculated
-          </h2>
-          <ol className={styles.steps}>
-            {tool.method.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-          <div className={styles.sources}>
-            {sources.map((source) => (
-              <SourceNote key={source.url} source={source} />
-            ))}
+        <div className="container">
+          <div className={styles.method}>
+            <h2 id="method-title" className={styles.methodTitle}>
+              How this is calculated
+            </h2>
+            <ol className={styles.steps}>
+              {tool.method.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+            <div className={styles.sources}>
+              {sources.map((source) => (
+                <SourceNote key={source.url} source={source} />
+              ))}
+            </div>
           </div>
         </div>
       </section>

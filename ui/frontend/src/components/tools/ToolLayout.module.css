@@ -6,12 +6,12 @@
   padding: var(--ns-section) 0 0;
 }
 
+/* A readable measure, aligned with the container's left edge like the tool above it. */
 .method {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: calc(780px + var(--ns-gutter) * 2);
-  margin-inline: 0;
+  max-width: 780px;
 }
 
 .methodTitle {

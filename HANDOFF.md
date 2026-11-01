@@ -1,27 +1,34 @@
 # Handoff: Next Solutions Website
 
-Last updated 2026-10-27.
+Last updated 2026-11-01.
 
 ## Delivered
 
-A five-page static website for Next Solutions, Vapi, in Niket's blue: Tally licences, customisation and support up front, with an animated invoice that switches between plain and customised Tally, a customisation explorer, a Silver-or-Gold advisor, and an enquiry form that opens WhatsApp with the visitor's need already written. It builds to plain HTML, so it can run on any static host instead of a laptop.
+Niket's own site, on his own URLs, in his logo and blue, built to plain static HTML:
+
+- Sixteen pages: home, about, products and services, TallyPrime, Tally on Mobile, Tally on Cloud, Saral Billing, Saral Payroll, digital marketing and design, contact, and free tools (GST calculator, GST invoice generator, GSTIN checker, MSME delayed-payment interest, amount in words).
+- Motion: a circuit-network hero grown from the logo, cascading reveals, ERP and cloud product sliders, counters and rings, a client marquee, a mega-menu, spotlight cards, and 3D emoji (Microsoft Fluent, MIT). Calm under reduced motion; fully readable without JavaScript.
+- Tools that sell: an animated invoice (plain vs customised Tally), a customisation explorer, a Silver-or-Gold advisor, a quick guide that recommends software, and an enquiry form. All three hand off to WhatsApp with the visitor's need already written.
+- A light / dark switch in the header (moon and sun). It follows the phone or computer setting until the visitor chooses, then remembers the choice.
 
 ## Verified
 
+Run on 2026-11-01 against the static build, Chrome, 1440 px and 390 px.
+
 | Check | Command | Result |
 | --- | --- | --- |
-| Typecheck (strict) | `npm --prefix ui/frontend run typecheck` | Pass |
-| Lint (Next core web vitals + TypeScript) | `npm --prefix ui/frontend run lint` | Pass, 0 problems |
-| Unit tests: licence rule, enquiry validation and message, WhatsApp URL, money formatting, invoice and report arithmetic | `npm --prefix ui/frontend run test` | 32 passed |
-| Static build | `npm --prefix ui/frontend run build` | 5 pages + 404, sitemap.xml, robots.txt, icon |
-| End-to-end journeys against the build | `python scripts/smoke.py http://localhost:4173` | 6 of 6 pass |
-| ARQ gate | `python <arq-zero-to-one>/scripts/verify.py .` | See note below |
+| Typecheck, lint, unit tests, static build | `npm --prefix ui/frontend run check` | Pass; lint 0 problems; 97 tests |
+| End-to-end journeys | `python scripts/smoke.py http://localhost:4173` | 14 of 14 pass |
+| Contrast, light and dark | `node scripts/contrast.mjs` | 52 pairs pass |
+| Lighthouse, mobile, `/` | `npx lighthouse ... --form-factor=mobile` | Perf 52, A11y 100, BP 100, SEO 100 |
+| Lighthouse, mobile, `/tally-prime/` | same | Perf 43, A11y 100, BP 96, SEO 100 |
+| First Load JS per route | gzip of the scripts in each built page | 253 to 269 kB (budget 200) |
 
-Journeys exercised in a real browser (Chrome, Playwright): all pages load with one h1 and no console errors; invoice toggle; five explorer tabs by mouse and arrow keys; advisor Silver, Gold and consult paths; enquiry form errors, first-field focus, then WhatsApp opened with need, name, business and mobile in the message; mobile menu open and Escape.
+Smoke journeys: 16 routes scrolled through with one h1 and no console errors; `/tally/` is 404; ERP slider by button and ArrowRight; mega-menu by keyboard and Escape; services filter; quick guide to TallyPrime Gold and WhatsApp; invoice toggle; customisation explorer by mouse and arrow keys; licence advisor paths; enquiry form errors then WhatsApp; mobile menu; light/dark switch (persists across pages, swaps logo and browser colour, phone starts dark from the system); reduced motion (no autoplay, all text visible); JavaScript off (all text visible).
 
-Looked at by screenshot: every page at 1440 px and 390 px in light mode, home in dark mode, every explorer preview, the standard invoice state, and the mobile menu.
+Looked at by screenshot: every page at 1440 px and 390 px in light and dark.
 
-ARQ gate note: it passes structure, constitution (8 rules, all proven), token layer, focus, reduced motion, dark tokens, alt text and secrets. It reports "no tests" because it only looks in `ui/backend/tests/`; this site has no backend (ADR 0001) and its 32 tests live in `ui/frontend/src/domain/`. Run the gate on a clean tree (no `ui/frontend/out/`), or it also counts compiled CSS as colors outside the token layer.
+Full results, Lighthouse detail and the fixes made during verification: `specs/003-slice-03-brand-motion.md`.
 
 ## Before going live
 
@@ -29,44 +36,43 @@ Confirm these with Niket. Each is one edit, listed with its file.
 
 | Item | Current value | File |
 | --- | --- | --- |
-| Shop address (three versions exist online) | 106, Bass Complex, GIDC Char Rasta, Vapi 396191 | `src/content/business.ts` |
+| Tally partner tier | "Tally Certified Solution Partner" (his Tally on Cloud page) | `src/content/tally.ts` (`partnerClaim`) |
+| Client count | "1000+ clients" (his site) | `src/content/proof.ts` (`clientCountClaim`) |
+| Permission to name clients, and client logos | Names shown, no logos | `src/content/proof.ts` |
+| Biz Analyst prices | 7-day trial; ₹3,300 a year; ₹9,900 for 5 years, per device + GST | `src/content/products.ts` |
+| Sales email | nextsolutions.service@gmail.com | `src/content/business.ts` |
 | WhatsApp number | Same as phone, +91 97276 71017 | `src/content/business.ts` |
-| Email | None shown | `src/content/business.ts` |
-| Real logo | Built-in N-and-chevron mark | `public/brand/` + `src/content/brand.ts` |
-| Exact brand blue | #1b5bd0 | `src/styles/theme.css` |
-| Tally partner tier | Not claimed anywhere | add to Hero and About once confirmed |
+| Vyapar referral code shown | 77WDW1 | `src/content/products.ts` |
+| High-resolution logo | 250 x 186 px source; ask for SVG or a 1000 px PNG, then rerun `scripts/brand-assets.mjs` | `images/`, `public/brand/` |
 | Customisation starting price | From ₹5,500 (his IndiaMART listing) | `src/content/tally.ts` |
 | Tally list prices | Silver ₹22,500, Gold ₹67,500, per Tally Solutions, July 2026 | `src/content/tally.ts` |
-| Permission to name the 7 clients | Shown | `src/content/proof.ts` |
 | Testimonials | Two anonymous Google review excerpts | `src/content/proof.ts` |
-| Services list | Insurance dropped; 3D visuals kept | `src/content/services.ts` |
 | Founder photo | The portrait Rishi shared | `public/brand/niket-naik.webp` |
 
 ## Not built
 
 | Excluded | Why |
 | --- | --- |
-| Backend, database, stored enquiries | Static site by design; enquiries go to WhatsApp, where Niket already works |
-| AI chat assistant | Next slice, once the site is live and getting traffic; needs a server for the model key |
-| Gujarati and Hindi pages | English first; i18n is a later slice |
-| Analytics and cookie banner | No tracking in v1, so no consent banner needed |
-| Theme switch button | Tokens already honour `data-theme`; only the button is missing |
-| Blog or case studies | No case-study material yet |
+| Backend, database, stored enquiries | Static site by design; enquiries go to WhatsApp |
+| AI chat assistant | Needs a server for the model key; the quick guide is scripted and says so |
+| Gujarati and Hindi pages | English first |
+| Analytics and cookie banner | No tracking, so no consent banner |
+| Blog, case studies | No real material yet; `content/portfolio.ts` is empty on purpose |
 
 ## Known limits
 
+- Performance budget not met: Lighthouse mobile performance is 52 on `/` and 43 on `/tally-prime/` (local server, no compression, noisy TBT), and First Load JS is 253 to 269 kB against 200. Plan in `specs/003-slice-03-brand-motion.md`.
 - The invoice and report mock-ups use an invented company and are labelled as samples.
-- Prices change; `asOf` dates in `content/tally.ts` need a check every few months.
-- The Google Maps link opens a search for the address; it is not a pinned place until Niket's Google Business Profile address is fixed.
+- Prices change; check the `asOf` dates in `content/tally.ts`, `content/products.ts` and `content/tools.ts` every few months.
 - `NEXT_PUBLIC_SITE_URL` is baked in at build time.
 
 ## Operational notes
 
-- Deploy: `npm run build` in `ui/frontend`, then serve `out/`. Vercel, Netlify and Cloudflare Pages settings are in `README.md`.
-- After launch: point nxtsolutions.in at the host, retire the laptop server, submit the sitemap in Google Search Console, and update the address on IndiaMART, LinkedIn and Google so all three match `business.ts`.
-- The smoke test needs `pip install playwright` and a Chrome binary (`CHROME_PATH`).
+- Deploy: Vercel project in `ui/frontend` (root directory `ui/frontend`, build `npm run build`, output `out`). Other static hosts: README.
+- Local preview: `python scripts/serve.py 4173 ui/frontend/out`.
+- Smoke and screenshots need `pip install playwright` and `CHROME_PATH` pointing at Chrome. In Git Bash, prefix route arguments with `MSYS_NO_PATHCONV=1`.
 
 ## Next
 
-Next acceptance criterion: the site is live on nxtsolutions.in from a static host, with every "Before going live" item confirmed, and Google Search Console shows the sitemap read with 5 pages discovered.
-Spec: `specs/000-product-brief.md` (acceptance criteria 1 to 8 hold in production).
+Next acceptance criterion: Lighthouse mobile performance 90 or above on `/` and `/tally-prime/`, measured on a Vercel preview, with First Load JS at most 200 kB per route.
+Then: the site live on nxtsolutions.in with every "Before going live" item confirmed, and the sitemap read in Google Search Console with 16 pages discovered.

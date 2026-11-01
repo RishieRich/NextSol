@@ -118,6 +118,13 @@ ol {
   white-space: nowrap;
 }
 
+/* While the theme switches, every color changes in the same frame (lib/theme.ts adds and removes this). */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
 .skip-link {
   position: fixed;
   top: 12px;

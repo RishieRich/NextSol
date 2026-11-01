@@ -2,12 +2,13 @@
 
 The website for Next Solutions, Vapi: Tally sales, customisation and support, plus design, web and IT services. Built as a static Next.js site so it stays online without a server.
 
-Status: v1. Stack: Next.js 16 static export, TypeScript, CSS Modules on a token layer. Started 2026-10-27.
+Status: slice 03 verified (performance budget still open). Stack: Next.js 16 static export, TypeScript, CSS Modules on a token layer, Motion and Embla for animation (ADR 0002). Started 2026-10-27.
 
 ## What is real
 
-- Working: five pages (home, Tally, services, about, contact) with an interactive invoice demo, a customisation explorer, a Silver-or-Gold advisor, a FAQ, and an enquiry form that opens WhatsApp with the visitor's message already written.
-- Data: business details from public listings, Tally list prices from Tally Solutions (sourced and dated on the page). The invoice and report mock-ups use an invented company and are labelled as samples.
+- Working: sixteen pages on Niket's own URLs (home, about, products and services, five product pages, digital marketing, contact, and five free GST and invoicing tools), with the circuit-network hero, product sliders, an interactive invoice demo, a customisation explorer, a Silver-or-Gold advisor, a scripted quick guide, and an enquiry form that opens WhatsApp with the visitor's message already written.
+- Light and dark mode: follows the device setting, and the sun / moon switch in the header lets the visitor choose (remembered in their browser).
+- Data: business details from his live site and public listings, prices with their source and date on the page. The invoice and report mock-ups use an invented company and are labelled as samples.
 - To confirm with Niket before launch: see "Before going live" in `HANDOFF.md`.
 - Not built: see the non-goals in `specs/000-product-brief.md`.
 
@@ -25,10 +26,10 @@ npm run dev
 # all checks: typecheck, lint, unit tests, static build into ui/frontend/out
 npm run check
 
-# preview the production build at http://localhost:4173
-python3 -m http.server 4173 --directory out
+# preview the production build at http://localhost:4173 (from the repo root)
+python scripts/serve.py 4173 ui/frontend/out
 
-# end-to-end journeys (from the repo root; needs: pip install playwright)
+# end-to-end journeys (from the repo root; needs: pip install playwright, and CHROME_PATH set to Chrome)
 python scripts/smoke.py http://localhost:4173
 ```
 
@@ -48,12 +49,15 @@ Then point nxtsolutions.in at the host and submit `https://nxtsolutions.in/sitem
 
 | To change | Edit |
 | --- | --- |
-| Phone, WhatsApp, address, hours, GSTIN | `ui/frontend/src/content/business.ts` |
+| Phone, WhatsApp, email, address, hours, GSTIN, social links | `ui/frontend/src/content/business.ts` |
 | Tally services, prices, customisations, FAQ | `ui/frontend/src/content/tally.ts` |
-| Other services and the four-step process | `ui/frontend/src/content/services.ts` |
-| Clients and reviews | `ui/frontend/src/content/proof.ts` |
-| Logo | put the file in `ui/frontend/public/brand/`, fill `ui/frontend/src/content/brand.ts` |
-| Brand colors | `ui/frontend/src/styles/theme.css` (`--ns-blue`, `--ns-blue-hover`, `--ns-blue-soft`) |
+| Every product and service (pages, cards, sliders, mega-menu) | `ui/frontend/src/content/products.ts` |
+| Free tools and their rates | `ui/frontend/src/content/tools.ts` |
+| The four-step process | `ui/frontend/src/content/services.ts` |
+| Clients, reviews and the client count | `ui/frontend/src/content/proof.ts` |
+| Values and timeline | `ui/frontend/src/content/about.ts` |
+| Logo | put the file in `images/`, run `node scripts/brand-assets.mjs`, check `ui/frontend/src/content/brand.ts` |
+| Brand colors, light and dark | `ui/frontend/src/styles/theme.css` (both dark blocks must stay equal) |
 | Founder photo | replace `ui/frontend/public/brand/niket-naik.webp` (square, 720 px) |
 
 ## Layout

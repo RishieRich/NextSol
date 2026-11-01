@@ -15,6 +15,7 @@ import { getProduct, productPages, type Product } from "@/content/products";
 import { telHref } from "@/domain/format";
 import { cascade } from "@/lib/motion";
 import styles from "./Header.module.css";
+import { ThemeToggle } from "./ThemeToggle";
 
 const megaColumns = megaMenu.map((column) => ({ ...column, products: column.slugs.map(getProduct) }));
 const productHref = (product: Product) => product.page ?? `/services/#${product.slug}`;
@@ -243,6 +244,8 @@ export function Header() {
               Get a quote
             </ButtonLink>
           </div>
+
+          <ThemeToggle className={styles.themeToggle} />
 
           <button
             type="button"

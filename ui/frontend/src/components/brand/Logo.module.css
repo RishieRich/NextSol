@@ -18,15 +18,34 @@
   transform-origin: left center;
 }
 
-.picture,
 .img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
-.img {
-  object-fit: contain;
+/* Light mode shows the transparent logo, dark mode the on-dark one: by system setting or the header switch. */
+.imgDark {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .imgLight {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .imgDark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .imgLight {
+    display: none;
+  }
+
+  :global(:root:not([data-theme="light"])) .imgDark {
+    display: block;
+  }
 }
 
 /* Sheen, clipped to the ink of the logo */

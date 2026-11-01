@@ -64,6 +64,11 @@
   margin-top: 28px;
 }
 
+/* Every slide already fits: nothing to scroll, so the controls go (their space stays, so nothing shifts). */
+.controls[data-static] {
+  visibility: hidden;
+}
+
 .dots {
   display: flex;
   gap: 4px;

@@ -62,7 +62,11 @@ export function Slider({ label, children, autoplay = true }: { label: string; ch
     return () => observer.disconnect();
   }, []);
 
-  const shouldPlay = autoplay && motionOk && !userStopped && !hovered && !focused && onScreen && pageVisible;
+  // When every slide fits in view there is one snap and nothing to scroll: Embla's autoplay plugin skips its own
+  // setup in that case, so calling play() would throw. Autoplay and the controls only apply once it can scroll.
+  const canScroll = snaps.length > 1;
+  const isStatic = Boolean(api) && !canScroll;
+  const shouldPlay = autoplay && canScroll && motionOk && !userStopped && !hovered && !focused && onScreen && pageVisible;
 
   useEffect(() => {
     if (!api) return;
@@ -103,9 +107,10 @@ export function Slider({ label, children, autoplay = true }: { label: string; ch
       }}
     >
       <div ref={viewportRef} className={styles.viewport}>
-        <ul className={styles.container}>
+        {/* APG carousel pattern: each slide is a group labelled "n of total" (not list items, whose role a group would override). */}
+        <div className={styles.container}>
           {slides.map((slide, index) => (
-            <li
+            <div
               key={index}
               className={styles.slide}
               role="group"
@@ -113,12 +118,13 @@ export function Slider({ label, children, autoplay = true }: { label: string; ch
               aria-label={`${index + 1} of ${slides.length}`}
             >
               {slide}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      <div className={styles.controls}>
+      {/* Hidden (space kept, so nothing below moves) when all slides already fit. */}
+      <div className={styles.controls} data-static={isStatic || undefined}>
         <div className={styles.dots}>
           {snaps.map((_, index) => (
             <button

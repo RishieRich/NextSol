@@ -1,0 +1,60 @@
+/* Light / dark switch: a round button that shows a moon in light mode and a sun in dark mode. */
+.toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--ns-line);
+  border-radius: 50%;
+  background: var(--ns-surface);
+  color: var(--ns-text);
+  cursor: pointer;
+  transition:
+    background-color var(--ns-dur-1) var(--ns-ease),
+    border-color var(--ns-dur-1) var(--ns-ease),
+    color var(--ns-dur-1) var(--ns-ease);
+}
+
+.toggle:hover {
+  border-color: var(--ns-line-strong);
+  background: var(--ns-surface-2);
+  color: var(--ns-blue);
+}
+
+.moon,
+.sun {
+  grid-area: 1 / 1;
+  transition: transform var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+.toggle:hover .moon {
+  transform: rotate(-18deg);
+}
+
+.toggle:hover .sun {
+  transform: rotate(45deg);
+}
+
+.sun {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .sun {
+  display: block;
+}
+
+:global(:root[data-theme="dark"]) .moon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .sun {
+    display: block;
+  }
+
+  :global(:root:not([data-theme="light"])) .moon {
+    display: none;
+  }
+}

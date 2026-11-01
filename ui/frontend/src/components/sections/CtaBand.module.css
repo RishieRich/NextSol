@@ -18,9 +18,9 @@
   color: inherit;
 }
 
+/* Full strength: at 85% opacity this line fell to 4.18:1 on the brand blue. */
 .text {
   margin-top: 10px;
-  opacity: 0.85;
 }
 
 .actions {

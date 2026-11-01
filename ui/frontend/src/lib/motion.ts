@@ -20,6 +20,8 @@ export const motionTokens = {
   staggerWord: 0.04,
   revealY: 20,
   floatY: 6,
+  /** Lowest opacity for real text that brightens on scroll: 0.7 keeps it at AA (3:1 large text) in both themes. */
+  dimText: 0.7,
   ease: [0.2, 0.7, 0.2, 1] as [number, number, number, number],
   easeOut: [0.16, 1, 0.3, 1] as [number, number, number, number],
 } as const;

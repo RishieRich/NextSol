@@ -53,18 +53,28 @@ export function Logo({ tone = "default", height = 56, intro = false }: Props) {
   return (
     <Link href="/" className={className} aria-label={`${business.name}, home`}>
       <span className={styles.frame} style={style}>
-        <picture className={styles.picture}>
-          {tone === "default" ? <source srcSet={brandLogo.onDark.src} media="(prefers-color-scheme: dark)" /> : null}
+        {/* eslint-disable-next-line @next/next/no-img-element -- static export serves the file as-is; size is explicit */}
+        <img
+          src={light.src}
+          width={width}
+          height={safeHeight}
+          alt=""
+          className={tone === "default" ? `${styles.img} ${styles.imgLight}` : styles.img}
+          fetchPriority={intro ? "high" : "auto"}
+          decoding="async"
+        />
+        {/* Both files are in the page and CSS shows the one for the current theme, so the header switch swaps them too. */}
+        {tone === "default" ? (
+          // eslint-disable-next-line @next/next/no-img-element -- static export serves the file as-is; size is explicit
           <img
-            src={light.src}
+            src={brandLogo.onDark.src}
             width={width}
             height={safeHeight}
             alt=""
-            className={styles.img}
-            fetchPriority={intro ? "high" : "auto"}
+            className={`${styles.img} ${styles.imgDark}`}
             decoding="async"
           />
-        </picture>
+        ) : null}
         <span className={styles.sheen} aria-hidden="true" />
         <svg className={styles.nodes} viewBox={`0 0 ${brandLogo.width} ${brandLogo.height}`} aria-hidden="true" focusable="false">
           {brandLogo.nodes.map(([cx, cy], index) => (

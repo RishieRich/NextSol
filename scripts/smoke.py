@@ -14,8 +14,9 @@ Checks:
   8. The licence advisor recommends Silver, Gold, and a consultation correctly.
   9. The enquiry form blocks empty input, then opens WhatsApp with the message filled in.
  10. The mobile menu opens and closes.
- 11. With reduced motion the slider does not autoplay and all content is visible.
- 12. With JavaScript disabled all home text is visible.
+ 11. The light/dark switch changes the theme, keeps the choice across pages and swaps the logo.
+ 12. With reduced motion the slider does not autoplay and all content is visible.
+ 13. With JavaScript disabled all home text is visible.
  With a screenshot dir, also saves a frame sequence of the hero loading.
 
 WhatsApp (wa.me) is stubbed, so nothing leaves the machine.
@@ -131,8 +132,10 @@ def main() -> int:
                 response = page.goto(f"{base}{path}", wait_until="networkidle")
                 assert response and response.ok, f"{path} returned {response.status if response else 'nothing'}"
                 expect(page.locator("h1")).to_have_count(1)
-            assert not errors, f"console errors: {errors[:3]}"
-            return f"{len(PAGES)} routes, one h1 each, no console errors"
+                # Scroll through, so sliders, reveals and counters that start on view run too.
+                scroll_through(page)
+                assert not errors, f"console errors on {path}: {errors[:3]}"
+            return f"{len(PAGES)} routes scrolled through, one h1 each, no console errors"
 
         check("pages load", pages_load)
 
@@ -319,6 +322,58 @@ def main() -> int:
             return "opens, Escape closes"
 
         check("mobile menu", mobile_menu)
+
+        def theme_switch():
+            bg = "getComputedStyle(document.body).backgroundColor"
+            visible_logo = """() => [...document.querySelectorAll('header img[src^="/brand/logo"]')]
+                .filter((img) => getComputedStyle(img).display !== 'none')
+                .map((img) => img.getAttribute('src'))"""
+            themed = browser.new_context(viewport={"width": 1440, "height": 900}, color_scheme="light")
+            t = themed.new_page()
+            t.goto(f"{base}/", wait_until="networkidle")
+            toggle = t.get_by_role("button", name="Dark mode")
+            expect(toggle).to_have_attribute("aria-pressed", "false")
+            light_bg = t.evaluate(bg)
+            assert t.evaluate(visible_logo) == ["/brand/logo-transparent.webp"], t.evaluate(visible_logo)
+            toggle.click()
+            expect(t.locator("html")).to_have_attribute("data-theme", "dark")
+            expect(toggle).to_have_attribute("aria-pressed", "true")
+            t.wait_for_timeout(400)
+            dark_bg = t.evaluate(bg)
+            assert dark_bg != light_bg, f"background stayed {light_bg}"
+            assert t.evaluate(visible_logo) == ["/brand/logo-on-dark.webp"], t.evaluate(visible_logo)
+            # The choice survives a reload and a new page, applied before first paint.
+            t.goto(f"{base}/tally-prime/", wait_until="commit")
+            t.wait_for_selector("body")
+            assert t.evaluate("document.documentElement.dataset.theme") == "dark", "choice lost on navigation"
+            t.wait_for_load_state("networkidle")
+            assert t.evaluate(bg) == dark_bg, "dark background not applied after navigation"
+            assert t.evaluate("""[...document.querySelectorAll('meta[name="theme-color"]')].every((m) => m.content === '#00151a')"""), (
+                "theme-color meta not following the choice"
+            )
+            if shots:
+                t.screenshot(path=str(shots / "theme-dark-forced.png"))
+            t.get_by_role("button", name="Dark mode").click()
+            expect(t.locator("html")).to_have_attribute("data-theme", "light")
+            t.wait_for_timeout(400)
+            assert t.evaluate(bg) == light_bg, "light background not restored"
+            themed.close()
+
+            # Phone: the switch sits beside the menu button. System dark: it starts pressed.
+            phone = browser.new_context(viewport={"width": 390, "height": 844}, color_scheme="dark")
+            ph = phone.new_page()
+            ph.goto(f"{base}/", wait_until="networkidle")
+            phone_toggle = ph.get_by_role("button", name="Dark mode")
+            expect(phone_toggle).to_be_visible()
+            expect(phone_toggle).to_have_attribute("aria-pressed", "true")
+            box, menu_box = phone_toggle.bounding_box(), ph.get_by_role("button", name="Open menu").bounding_box()
+            assert box and menu_box and box["x"] < menu_box["x"] and abs(box["y"] - menu_box["y"]) < 12, f"{box} vs {menu_box}"
+            phone_toggle.click()
+            expect(ph.locator("html")).to_have_attribute("data-theme", "light")
+            phone.close()
+            return "light -> dark -> light, kept across pages, logo and theme-color follow; phone starts dark from the system"
+
+        check("theme switch", theme_switch)
 
         def reduced_motion():
             calm = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")

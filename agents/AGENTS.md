@@ -12,7 +12,7 @@ Authoritative instructions for any coding agent working in this repository. Othe
 ## Non-negotiables
 
 - One fact, one authority. Business facts live in `ui/frontend/src/content/`. Arithmetic and formatting live in `ui/frontend/src/domain/`. Components never compute or hard-code either.
-- Every price carries a `source` with a date. No price without one.
+- Every price carries a `source` with a date. No price without one. This includes product prices in `content/products.ts` and tool rates in `content/tools.ts`.
 - Invented data stays in `content/samples.ts` and is labelled as a sample wherever it renders.
 - Missing facts stay missing. Do not fill in an email, a partner tier, a client count or a testimonial that Niket has not confirmed.
 - Colors, shadows, radii, fonts and motion come from `ui/frontend/src/styles/theme.css`. A hex or rgb value in a component or CSS module is a bug.
@@ -42,7 +42,9 @@ Next Solutions blue: deep brand blue (`--ns-blue`), navy bands (`--ns-navy`), am
 
 Typography: Schibsted Grotesk only. Use `.tabular` only on number columns in tables; in this typeface tabular figures also widen commas and full stops.
 
-Motion: one load sequence in the hero invoice; everything else answers a visitor's action (toggle, tab, choice, menu) or draws once on scroll (process line). Keep it that way.
+Light and dark: the system setting decides until the visitor presses the header switch, which sets `data-theme` on `<html>` and remembers it (ADR 0003). Any CSS that changes by theme must use both `:root[data-theme="dark"]` and `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`, never the media query alone. Check every visual change in both themes.
+
+Motion (ADR 0002): Motion for React (`LazyMotion`, `m.*`) and Embla for sliders, nothing else. Use the variants in `src/lib/motion.ts` and the motion tokens, never ad-hoc numbers. Hidden starting states apply only under `motion-ready`, so every page reads fully without JavaScript. Reduced motion and save-data turn off autoplay, parallax, float, pulses and tilt. Animate only transform, opacity, filter, clip-path and path length. At most one decorative loop per viewport besides the logo marquee, paused off-screen by `LoopController`. The hero network is the one place to spend boldness.
 
 ## Commands
 
@@ -50,8 +52,9 @@ Motion: one load sequence in the hero invoice; everything else answers a visitor
 cd ui/frontend && npm install
 npm --prefix ui/frontend run dev
 npm --prefix ui/frontend run check        # typecheck, lint, unit tests, static build
-npx --prefix ui/frontend serve ui/frontend/out   # or: python -m http.server 4173 --directory ui/frontend/out
-python scripts/smoke.py http://localhost:4173
+python scripts/serve.py 4173 ui/frontend/out    # serve the build the way a static host would
+python scripts/smoke.py http://localhost:4173    # set CHROME_PATH to your Chrome binary
+SCHEMES=light,dark python scripts/screenshot.py http://localhost:4173 <out-dir> / /tally-prime/   # Git Bash: prefix MSYS_NO_PATHCONV=1
 ```
 
 ## Report format

@@ -329,6 +329,11 @@
   color: var(--ns-blue);
 }
 
+/* Sits right after "Get a quote" on desktop (the row gap is 28 px; this pulls it to the actions' 18 px). */
+.themeToggle {
+  margin-left: -10px;
+}
+
 .menuButton {
   display: none;
   margin-left: auto;
@@ -360,8 +365,15 @@
     display: none;
   }
 
+  /* Phone and tablet: logo on the left, then the theme switch and the menu button together on the right. */
+  .themeToggle {
+    margin-left: auto;
+    margin-right: -18px;
+  }
+
   .menuButton {
     display: inline-flex;
+    margin-left: 0;
   }
 
   .header {
