@@ -20,9 +20,10 @@ Run on 2026-11-01 against the static build, Chrome, 1440 px and 390 px.
 | Typecheck, lint, unit tests, static build | `npm --prefix ui/frontend run check` | Pass; lint 0 problems; 97 tests |
 | End-to-end journeys | `python scripts/smoke.py http://localhost:4173` | 14 of 14 pass |
 | Contrast, light and dark | `node scripts/contrast.mjs` | 52 pairs pass |
-| Lighthouse, mobile, `/` | `npx lighthouse ... --form-factor=mobile` | Perf 52, A11y 100, BP 100, SEO 100 |
-| Lighthouse, mobile, `/tally-prime/` | same | Perf 43, A11y 100, BP 96, SEO 100 |
+| Lighthouse, mobile, live `/` | `npx lighthouse https://next-solutions-web.vercel.app/ --form-factor=mobile` | Perf 94, A11y 100, BP 100, SEO 100; LCP 1.4 s, CLS 0.004, TBT 270 ms |
+| Lighthouse, mobile, live `/tally-prime/` | same | Perf 96, A11y 100, BP 96, SEO 100; LCP 1.3 s, CLS 0.015, TBT 212 ms |
 | First Load JS per route | gzip of the scripts in each built page | 253 to 269 kB (budget 200) |
+| Smoke against production | `python scripts/smoke.py https://next-solutions-web.vercel.app` | 14 of 14 pass |
 
 Smoke journeys: 16 routes scrolled through with one h1 and no console errors; `/tally/` is 404; ERP slider by button and ArrowRight; mega-menu by keyboard and Escape; services filter; quick guide to TallyPrime Gold and WhatsApp; invoice toggle; customisation explorer by mouse and arrow keys; licence advisor paths; enquiry form errors then WhatsApp; mobile menu; light/dark switch (persists across pages, swaps logo and browser colour, phone starts dark from the system); reduced motion (no autoplay, all text visible); JavaScript off (all text visible).
 
@@ -61,18 +62,20 @@ Confirm these with Niket. Each is one edit, listed with its file.
 
 ## Known limits
 
-- Performance budget not met: Lighthouse mobile performance is 52 on `/` and 43 on `/tally-prime/` (local server, no compression, noisy TBT), and First Load JS is 253 to 269 kB against 200. Plan in `specs/003-slice-03-brand-motion.md`.
+- Two budgets are still over: TBT is 270 ms on `/` and 212 ms on `/tally-prime/` (budget 200), and First Load JS is 253 to 269 kB (budget 200). Performance scores themselves pass on Vercel (94 and 96). Plan in `specs/003-slice-03-brand-motion.md`.
+- Pushing to `main` does not deploy: the Vercel project is not connected to GitHub. Deploy with `vercel deploy --prod` from `ui/frontend`, or run `vercel git connect` once.
 - The invoice and report mock-ups use an invented company and are labelled as samples.
 - Prices change; check the `asOf` dates in `content/tally.ts`, `content/products.ts` and `content/tools.ts` every few months.
 - `NEXT_PUBLIC_SITE_URL` is baked in at build time.
 
 ## Operational notes
 
-- Deploy: Vercel project in `ui/frontend` (root directory `ui/frontend`, build `npm run build`, output `out`). Other static hosts: README.
+- Live: https://next-solutions-web.vercel.app (production, deployed 2026-11-01 from commit `2d6758d`).
+- Deploy: Vercel project `next-solutions-web`, linked in `ui/frontend` (build `npm run build`, output `out`); `vercel deploy --prod` from there. Other static hosts: README.
 - Local preview: `python scripts/serve.py 4173 ui/frontend/out`.
 - Smoke and screenshots need `pip install playwright` and `CHROME_PATH` pointing at Chrome. In Git Bash, prefix route arguments with `MSYS_NO_PATHCONV=1`.
 
 ## Next
 
-Next acceptance criterion: Lighthouse mobile performance 90 or above on `/` and `/tally-prime/`, measured on a Vercel preview, with First Load JS at most 200 kB per route.
-Then: the site live on nxtsolutions.in with every "Before going live" item confirmed, and the sitemap read in Google Search Console with 16 pages discovered.
+Next acceptance criterion: the site live on nxtsolutions.in with every "Before going live" item confirmed, and the sitemap read in Google Search Console with 16 pages discovered.
+Then: TBT at most 200 ms and First Load JS at most 200 kB per route.

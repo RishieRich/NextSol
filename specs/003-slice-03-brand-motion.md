@@ -1,6 +1,6 @@
 # Slice 03: brand, motion, product pages, free tools and theme switch
 
-Part of: `specs/000-product-brief.md`. Prompt: `specs/003-brand-and-motion-upgrade.md`. Status: verified, except the performance budgets (see "Not met").
+Part of: `specs/000-product-brief.md`. Prompt: `specs/003-brand-and-motion-upgrade.md`. Status: verified and live at https://next-solutions-web.vercel.app, except the TBT and First Load JS budgets (see "Not met").
 
 ## Outcome
 
@@ -47,11 +47,18 @@ Verified 2026-11-01 against the static build served by `scripts/serve.py`, Chrom
 | 3 | His blue and ink; every text pair passes AA in light and dark | Pass: `scripts/contrast.mjs` 52 pairs; Lighthouse accessibility 100 on `/` and `/tally-prime/` |
 | 4 | No content from the old site's theme junk | Pass: no match for the section 2.3 strings in `src/` or `out/` |
 | 5 | Hero, sliders, cascades, counters, marquee, mega-menu, cards and guide work by mouse, touch and keyboard, and degrade under reduced motion and without JavaScript | Pass: `scripts/smoke.py`, 14 of 14 |
-| 6 | Lighthouse budgets on `/` and `/tally-prime/` | Not met: see below |
+| 6 | Lighthouse budgets on `/` and `/tally-prime/` | Mostly met on production: scores 94 and 96, LCP and CLS within budget; TBT (270 and 212 ms) and First Load JS over. See below |
 | 7 | `npm run check` and `scripts/smoke.py` pass, including earlier journeys | Pass: typecheck, lint (0 problems), 97 unit tests, build; smoke 14 of 14 |
 | 8 | Light/dark switch works, persists, swaps the logo, no flash | Pass: smoke "theme switch" journey |
 
-### Lighthouse (mobile, local Python server without compression)
+### Lighthouse (mobile, production on Vercel: https://next-solutions-web.vercel.app)
+
+| Page | Performance | Accessibility | Best practices | SEO | LCP | CLS | TBT |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `/` | 94 | 100 | 100 | 100 | 1.4 s | 0.004 | 270 ms |
+| `/tally-prime/` | 96 | 100 | 96 | 100 | 1.3 s | 0.015 | 212 ms |
+
+### Lighthouse (mobile, local Python server without compression; for comparison)
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP (simulated / observed) | CLS | TBT |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -74,7 +81,7 @@ Budget: 200 kB. Framework (React DOM, Next router and client) is about 154 kB of
 
 ## Not met, and the plan
 
-- Performance 90 and First Load JS 200 kB are not met. Next steps, in order: measure on a Vercel preview; move the header scroll progress and shrink (`useScroll`, `useSpring`) and the guide panel off Motion to CSS and a lazy import so Motion loads only where a section needs it; profile the `/tally-prime/` style-and-layout cost (5.7 s main-thread style and layout in the first run).
+- On production, performance passes (94, 96); TBT (270 and 212 ms against 200) and First Load JS (200 kB) do not. Next steps, in order: move the header scroll progress and shrink (`useScroll`, `useSpring`) and the guide panel off Motion to CSS and a lazy import so Motion loads only where a section needs it; profile the `/tally-prime/` style-and-layout cost (5.7 s main-thread style and layout in the first run).
 - Best practices on `/tally-prime/` is 96 because the hero shows the 160 px emoji larger than its natural size on high-density screens.
 
 ## Fixed during verification
