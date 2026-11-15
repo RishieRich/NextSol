@@ -32,6 +32,39 @@
   border-color: var(--ns-blue);
 }
 
+/* Reading progress: a ring over the border that fills clockwise from the top */
+.ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  rotate: -90deg;
+  pointer-events: none;
+}
+
+.track {
+  fill: none;
+  stroke: var(--ns-line);
+  stroke-width: 2;
+}
+
+.fill {
+  fill: none;
+  stroke: var(--ns-blue);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.arrow {
+  transition: transform var(--ns-dur-2) var(--ns-ease-spring);
+}
+
+@media (hover: hover) {
+  .button:hover .arrow {
+    transform: translateY(-3px);
+  }
+}
+
 /* Desktop: sits above the guide button. Phone: above the action bar. */
 .button {
   bottom: 88px;

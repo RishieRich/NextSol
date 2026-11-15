@@ -27,6 +27,53 @@
   transform: translateY(1px) scale(0.985);
 }
 
+/* Press ripple, mouse and touch alike: PointerEffects sets --rx/--ry/--rs at the press point and flips
+   data-ripple between "a" and "b", so each press restarts the wave. It takes the text color, 12 to 24% strong. */
+.button::before {
+  content: "";
+  position: absolute;
+  left: var(--rx, 50%);
+  top: var(--ry, 50%);
+  z-index: -1;
+  width: var(--rs, 0px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+}
+
+.button[data-ripple="a"]::before {
+  animation: ripple-a 650ms var(--ns-ease-out);
+}
+
+.button[data-ripple="b"]::before {
+  animation: ripple-b 650ms var(--ns-ease-out);
+}
+
+@keyframes ripple-a {
+  from {
+    opacity: 0.24;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes ripple-b {
+  from {
+    opacity: 0.24;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .iconEnd {
   transition: transform var(--ns-dur-2) var(--ns-ease-out);
 }
@@ -129,7 +176,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .primary::after,
-  .onDark::after {
+  .onDark::after,
+  .button::before {
     display: none;
   }
 }

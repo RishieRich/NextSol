@@ -1,5 +1,6 @@
 "use client";
 
+import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
@@ -15,8 +16,12 @@ import styles from "./HeroNetwork.module.css";
  * Load (CSS only, so it starts at first paint and needs no JavaScript): traces draw in as a cascade
  * (about 1.2 s), then the chips pop in. Afterwards, sky-blue pulses run along the traces every 3 to 5 s
  * and the chips float. Hover or focus lifts a chip, lights its trace and shows its name.
- * Pointer parallax (desktop, 12 px max) is the only JavaScript-driven part.
- * Without JavaScript everything renders in its final state; under reduced motion it is static.
+ * Pointer parallax (desktop, 12 px max) is the only JavaScript-driven loop. Scrolling away, the board
+ * trails the page by up to 64 px and settles back 4%, for depth (off under reduced motion).
+ * Pressing the central N sends a surge: light races down every trace to the chips, rings ripple out
+ * from the N and each chip bumps as the light arrives. It is one-shot, never a loop.
+ * Without JavaScript everything renders in its final state; under reduced motion it is static
+ * (a press only lights the traces for a moment).
  */
 
 const VIEW = { w: 600, h: 540 };
@@ -52,9 +57,30 @@ const BRANCH_NODES: readonly [number, number][] = [
 
 const pct = (value: number, total: number) => `${((value / total) * 100).toFixed(3)}%`;
 
+/** How long the traces stay lit after a press; the surge animations finish inside it. */
+const SURGE_MS = 1300;
+
 export function HeroNetwork() {
   const root = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
+  /** Counts presses: each new value remounts the surge layers, which restarts their CSS animations. */
+  const [surge, setSurge] = useState(0);
+  const surgeTimer = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(surgeTimer.current), []);
+
+  const fireSurge = () => {
+    setSurge((count) => Math.abs(count) + 1);
+    window.clearTimeout(surgeTimer.current);
+    surgeTimer.current = window.setTimeout(() => setSurge((count) => -Math.abs(count)), SURGE_MS);
+  };
+  const surging = surge > 0;
+
+  // Scroll depth: the hero sits at the top of the page, so page scroll is its own progress.
+  const still = Boolean(useReducedMotion());
+  const { scrollY } = useScroll();
+  const depthY = useTransform(scrollY, [0, 800], [0, 64], { clamp: true });
+  const depthScale = useTransform(scrollY, [0, 800], [1, 0.96], { clamp: true });
 
   // Pointer parallax: only with a fine pointer, motion allowed and the hero on screen.
   useEffect(() => {
@@ -90,7 +116,14 @@ export function HeroNetwork() {
   }, []);
 
   return (
-    <div ref={root} className={styles.network} data-loop="" data-active={active ?? undefined}>
+    <m.div
+      ref={root}
+      className={styles.network}
+      style={still ? undefined : { y: depthY, scale: depthScale }}
+      data-loop=""
+      data-active={active ?? undefined}
+      data-surging={surging || undefined}
+    >
       <div className={styles.glow} aria-hidden="true" />
 
       <svg className={styles.svg} viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} aria-hidden="true" focusable="false">
@@ -116,15 +149,38 @@ export function HeroNetwork() {
             />
           </g>
         ))}
+        {surging ? (
+          <g key={surge} className={styles.surge}>
+            {[...TRACES, ...BRANCHES].map((d, i) => (
+              <path key={d} d={d} pathLength={1} className={styles.surgeTrace} style={{ "--i": i } as CSSProperties} />
+            ))}
+          </g>
+        ) : null}
       </svg>
 
-      <div className={styles.core} aria-hidden="true">
-        <span className={styles.coreRing} />
+      <button type="button" className={styles.core} onClick={fireSurge} aria-label="Light up the network">
+        <span className={styles.coreRing} aria-hidden="true" />
+        {surging ? (
+          <span key={surge} className={styles.ripples} aria-hidden="true">
+            <span className={styles.ripple} />
+            <span className={styles.ripple} />
+          </span>
+        ) : null}
         {brandLogo ? (
           // eslint-disable-next-line @next/next/no-img-element -- static export serves the file as-is; size is explicit
-          <img src={brandLogo.mark.src} width={brandLogo.mark.width} height={brandLogo.mark.height} alt="" className={styles.coreMark} />
+          <img
+            src={brandLogo.mark.src}
+            width={brandLogo.mark.width}
+            height={brandLogo.mark.height}
+            alt=""
+            className={styles.coreMark}
+            draggable={false}
+          />
         ) : null}
-      </div>
+        <span className={styles.coreHint} aria-hidden="true">
+          Light it up
+        </span>
+      </button>
 
       <ul className={styles.chips}>
         {heroChips.map((chip, i) => {
@@ -133,6 +189,7 @@ export function HeroNetwork() {
             <li
               key={chip.href}
               className={styles.chipItem}
+              data-surge={surging ? surge % 2 : undefined}
               style={{ left: pct(x, VIEW.w), top: pct(y, VIEW.h), "--i": i, "--depth": 0.6 + (i % 3) * 0.25 } as CSSProperties}
             >
               <Link
@@ -153,6 +210,6 @@ export function HeroNetwork() {
           );
         })}
       </ul>
-    </div>
+    </m.div>
   );
 }

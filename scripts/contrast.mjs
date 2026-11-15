@@ -65,6 +65,9 @@ const pairs = [
   ["--ns-doc-muted", "--ns-doc", 4.5, "invoice muted text"],
   ["--ns-doc-accent", "--ns-doc", 4.5, "invoice accent"],
   ["--ns-logo-sky", "--ns-surface", 3, "logo sky marks (non-text)"],
+  // The home headline's last word runs a navy-to-sky gradient (Hero.module.css .accent); at 40 px and up it is large text.
+  ["--ns-logo-navy", "--ns-bg", 3, "hero headline gradient, navy end (large text)"],
+  ["--ns-logo-sky", "--ns-bg", 3, "hero headline gradient, sky end (large text)"],
   ["--ns-line-strong", "--ns-surface", 1.4, "field borders (decorative minimum)"],
 ];
 

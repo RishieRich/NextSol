@@ -16,7 +16,8 @@ import styles from "./Hero.module.css";
 
 /**
  * The home hero. Left: ticker, headline with the blue full stop, lede, two actions and three stats.
- * Right: the circuit network. The headline is real text that is visible at first paint
+ * Right: the circuit network over a faint board of dots. The last word of the headline carries the logo's
+ * navy-to-sky gradient. The headline is real text that is visible at first paint
  * (it only sharpens in from a blur, so it never delays the largest paint).
  */
 export function Hero() {
@@ -25,6 +26,7 @@ export function Hero() {
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.grain} aria-hidden="true" />
+      <div className={styles.dots} aria-hidden="true" />
       <div className={`container ${styles.grid}`}>
         <div className={styles.copy}>
           <div className={styles.ticker}>
@@ -34,7 +36,10 @@ export function Hero() {
           <h1 id="hero-title" className={styles.title}>
             {words.map((word, index) => (
               <Fragment key={`${word}-${index}`}>
-                <span className={styles.word} style={{ "--w": index } as CSSProperties}>
+                <span
+                  className={index === words.length - 1 ? `${styles.word} ${styles.accent}` : styles.word}
+                  style={{ "--w": index } as CSSProperties}
+                >
                   {word}
                   {index === words.length - 1 ? <span className={`ns-dot ${styles.dot}`}>.</span> : null}
                 </span>

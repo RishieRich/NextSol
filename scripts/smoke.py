@@ -14,6 +14,8 @@ Checks:
   8. The licence advisor recommends Silver, Gold, and a consultation correctly.
   9. The enquiry form blocks empty input, then opens WhatsApp with the message filled in.
  10. The mobile menu opens and closes.
+     The logo always goes to the top of the home page (from home, other pages and the footer; mouse and touch),
+     and pressing the hero's N lights up the network.
  11. The light/dark switch changes the theme, keeps the choice across pages and swaps the logo.
  12. With reduced motion the slider does not autoplay and all content is visible.
  13. With JavaScript disabled all home text is visible.
@@ -322,6 +324,61 @@ def main() -> int:
             return "opens, Escape closes"
 
         check("mobile menu", mobile_menu)
+
+        def logo_clicks():
+            home_logo = 'header a[aria-label$="home"]'
+            for name, viewport, touch in [("desktop", (1440, 900), False), ("phone", (390, 844), True)]:
+                lc = browser.new_context(viewport={"width": viewport[0], "height": viewport[1]}, has_touch=touch)
+                lp = lc.new_page()
+                press = (lambda loc: loc.tap()) if touch else (lambda loc: loc.click())
+                # On the home page, deep down (and with a #hash): the logo glides back to the top and clears the hash.
+                lp.goto(f"{base}/#contact", wait_until="networkidle")
+                lp.evaluate("window.scrollTo({top: 6000, behavior: 'instant'})")
+                lp.wait_for_timeout(300)
+                press(lp.locator(home_logo))
+                lp.wait_for_function("window.scrollY === 0", timeout=2000)
+                assert lp.url == f"{base}/", f"{name}: hash kept, {lp.url}"
+                # From another page, deep down: the logo goes home and the home page starts at the top.
+                for path, where in [("/tally-prime/", "header"), ("/about/", "footer")]:
+                    lp.goto(f"{base}{path}", wait_until="networkidle")
+                    logo = lp.locator(f'{where} a[aria-label$="home"]')
+                    if where == "header":
+                        lp.evaluate("window.scrollTo({top: 3000, behavior: 'instant'})")
+                    else:
+                        logo.scroll_into_view_if_needed()
+                    lp.wait_for_timeout(300)
+                    press(logo)
+                    lp.wait_for_url(f"{base}/")
+                    lp.wait_for_timeout(150)
+                    y = lp.evaluate("window.scrollY")
+                    assert y == 0, f"{name}: {where} logo on {path} landed at scrollY {y}"
+                if touch:
+                    # Phone, home page, menu open: the logo closes the menu and lands at the top.
+                    lp.evaluate("window.scrollTo({top: 2000, behavior: 'instant'})")
+                    lp.get_by_role("button", name="Open menu").tap()
+                    expect(lp.locator("#mobile-menu")).to_be_visible()
+                    lp.locator(home_logo).tap()
+                    expect(lp.locator("#mobile-menu")).to_be_hidden()
+                    lp.wait_for_function("window.scrollY === 0", timeout=2000)
+                lc.close()
+            return "home: back to the top, hash cleared; header and footer logos elsewhere land home at the top; mouse and touch"
+
+        check("logo clicks", logo_clicks)
+
+        def hero_surge():
+            hs = browser.new_context(viewport={"width": 1440, "height": 900})
+            h = hs.new_page()
+            h.goto(f"{base}/", wait_until="networkidle")
+            h.get_by_role("button", name="Light up the network").click()
+            expect(h.locator("[data-surging]")).to_have_count(1)
+            h.wait_for_timeout(250)
+            if shots:
+                h.screenshot(path=str(shots / "hero-surge.png"), clip={"x": 760, "y": 230, "width": 640, "height": 600})
+            expect(h.locator("[data-surging]")).to_have_count(0, timeout=3000)
+            hs.close()
+            return "pressing the N lights the network, then it settles"
+
+        check("hero surge", hero_surge)
 
         def theme_switch():
             bg = "getComputedStyle(document.body).backgroundColor"

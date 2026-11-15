@@ -42,7 +42,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     // The inline script adds classes to <html> before React hydrates; suppressHydrationWarning keeps them.
-    <html lang="en-IN" suppressHydrationWarning>
+    // data-scroll-behavior: in-page links glide (globals.css), but a route change jumps straight to the top
+    // of the new page instead of scrolling the old one up while the new one fades in (Next 16 opt-in).
+    <html lang="en-IN" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Runs before first paint: the stored light/dark choice, so a reload never flashes the wrong theme. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

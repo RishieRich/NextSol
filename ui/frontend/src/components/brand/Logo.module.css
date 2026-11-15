@@ -9,6 +9,9 @@
   color: var(--ns-text);
   text-decoration: none;
   border-radius: var(--ns-r-sm);
+  /* The press-and-light-up feedback (Logo.tsx) replaces the grey tap flash on phones. */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .frame {

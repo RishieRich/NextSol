@@ -95,8 +95,9 @@
   background: var(--ns-header-glass);
   border-bottom-color: var(--ns-line);
   box-shadow: var(--ns-shadow-sm);
-  backdrop-filter: saturate(1.4) blur(14px);
+  /* Prefixed first: the CSS minifier keeps only the last of the pair, and Chrome reads only the unprefixed one. */
   -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
 }
 
 .inner {
@@ -112,8 +113,10 @@
   transform: translateY(-8px);
 }
 
+/* Flex, not block: a block wrapper adds the inline line box's descender space under the logo,
+   which pushed it 6 px high and against the top edge once the bar shrank. */
 .logoWrap {
-  display: block;
+  display: flex;
   transform-origin: left center;
   transition: transform var(--ns-dur-2) var(--ns-ease-out);
 }
@@ -122,14 +125,15 @@
   transform: scale(0.857);
 }
 
-/* Scroll progress, 2 px in brand blue along the bottom of the bar */
+/* Scroll progress, 2 px along the bottom of the bar, in the logo's navy-to-sky gradient */
 .progress {
   position: absolute;
   left: 0;
   right: 0;
   top: calc(var(--ns-header-h) - 2px);
   height: 2px;
-  background: var(--ns-blue);
+  background: linear-gradient(90deg, var(--ns-logo-navy), var(--ns-blue) 55%, var(--ns-logo-sky));
+  box-shadow: 0 0 10px var(--ns-logo-sky-glow);
   transform-origin: left;
   transition: translate var(--ns-dur-2) var(--ns-ease-out);
 }

@@ -142,7 +142,14 @@ export function Header() {
       <header className={styles.header} data-scrolled={scrolled}>
         <div className={styles.bar} aria-hidden="true" />
         <div className={`container ${styles.inner}`}>
-          <span className={styles.logoWrap}>
+          {/* On the home page the logo click is not a route change, so close any open menu here. */}
+          <span
+            className={styles.logoWrap}
+            onClickCapture={() => {
+              setMenuOpen(false);
+              setMegaOpen(false);
+            }}
+          >
             <Logo intro height={56} />
           </span>
 

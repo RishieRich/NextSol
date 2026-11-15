@@ -1,9 +1,24 @@
+/* Every page already ends on a section with its own bottom padding; this margin only has to carry
+   pages whose last block has none (the 404). A full section here left 240 px of blank page. */
 .footer {
-  margin-top: var(--ns-section);
+  position: relative;
+  margin-top: clamp(40px, 5vw, 64px);
   padding-top: clamp(56px, 7vw, 88px);
-  background: var(--ns-navy-2);
+  background:
+    radial-gradient(40% 120px at 50% 0%, var(--ns-hero-glow), transparent),
+    var(--ns-navy-2);
   color: var(--ns-navy-text-2);
   font-size: var(--ns-fs-sm);
+}
+
+/* A lit edge along the top, brightest in the middle, like a trace on the board */
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ns-blue-on-dark) 50%, transparent);
+  opacity: 0.7;
 }
 
 .grid {

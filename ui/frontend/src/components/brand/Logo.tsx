@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import { usePathname } from "next/navigation";
+import { useRef, type CSSProperties, type MouseEvent } from "react";
 
 import { brandLogo } from "@/content/brand";
 import { business } from "@/content/business";
+import { motionTokens } from "@/lib/motion";
+import { scrollToTop } from "@/lib/scroll";
 import styles from "./Logo.module.css";
 
 /** The N-and-chevron mark, used only if the real logo file is ever removed from brand.ts. */
@@ -24,18 +29,63 @@ type Props = {
   intro?: boolean;
 };
 
+const ms = (seconds: number) => Math.round(seconds * 1000);
+const easeOut = `cubic-bezier(${motionTokens.easeOut.join(", ")})`;
+
 /**
- * Niket's logo, animated with CSS only (so it costs no JavaScript):
+ * Click feedback: the logo presses in, the circuit nodes light up in turn and the sheen sweeps.
+ * One-shot Web Animations layered over the CSS ones, so they never restart the intro or the hover replay.
+ */
+function playBurst(link: HTMLElement) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  link.querySelector(`.${styles.frame}`)?.animate(
+    [{ transform: "scale(1)" }, { transform: "scale(0.94)", offset: 0.35 }, { transform: "scale(1)" }],
+    { duration: ms(motionTokens.dur3), easing: easeOut },
+  );
+  link.querySelectorAll(`.${styles.node}`).forEach((node, index) => {
+    node.animate(
+      [
+        { opacity: 0, transform: "scale(0.3)" },
+        { opacity: 1, transform: "scale(1.6)", offset: 0.45 },
+        { opacity: 0, transform: "scale(1)" },
+      ],
+      { duration: ms(motionTokens.dur4) - 100, delay: index * 60, easing: easeOut },
+    );
+  });
+  link.querySelector(`.${styles.sheen}`)?.animate([{ backgroundPosition: "120% 0" }, { backgroundPosition: "-20% 0" }], {
+    duration: ms(motionTokens.dur4),
+    delay: 120,
+    easing: easeOut,
+  });
+}
+
+/**
+ * Niket's logo, animated with CSS (so the intro costs no JavaScript):
  * on load it rises into view, the eight circuit-tree nodes light up in turn in logo sky-blue,
  * and a light sheen sweeps across the ink. Hovering replays the nodes and the sheen.
  * Light mode shows the transparent logo, dark mode the on-dark variant.
+ *
+ * Clicking (or tapping) always answers: the logo presses in and lights up. On the home page it then
+ * glides back to the top instead of reloading; elsewhere it goes home and the new page starts at the top.
+ * Ctrl, Cmd, Shift and middle clicks keep the browser's own behavior (new tab, new window).
  */
 export function Logo({ tone = "default", height = 56, intro = false }: Props) {
+  const pathname = usePathname();
+  const link = useRef<HTMLAnchorElement>(null);
   const className = [styles.logo, tone === "onDark" ? styles.onDark : "", intro ? styles.intro : ""].filter(Boolean).join(" ");
+
+  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (link.current) playBurst(link.current);
+    if (pathname !== "/") return;
+    event.preventDefault();
+    if (window.location.hash) window.history.replaceState(window.history.state, "", "/");
+    scrollToTop();
+  };
 
   if (!brandLogo) {
     return (
-      <Link href="/" className={className} aria-label={`${business.name}, home`}>
+      <Link ref={link} href="/" className={className} aria-label={`${business.name}, home`} onClick={onClick}>
         <LogoMark />
         <span className={styles.wordmark}>
           <span className={styles.wordNext}>Next</span>
@@ -51,7 +101,7 @@ export function Logo({ tone = "default", height = 56, intro = false }: Props) {
   const style = { "--logo-mask": `url(${brandLogo.onDark.src})`, width, height: safeHeight } as CSSProperties;
 
   return (
-    <Link href="/" className={className} aria-label={`${business.name}, home`}>
+    <Link ref={link} href="/" className={className} aria-label={`${business.name}, home`} onClick={onClick}>
       <span className={styles.frame} style={style}>
         {/* eslint-disable-next-line @next/next/no-img-element -- static export serves the file as-is; size is explicit */}
         <img
@@ -62,6 +112,7 @@ export function Logo({ tone = "default", height = 56, intro = false }: Props) {
           className={tone === "default" ? `${styles.img} ${styles.imgLight}` : styles.img}
           fetchPriority={intro ? "high" : "auto"}
           decoding="async"
+          draggable={false}
         />
         {/* Both files are in the page and CSS shows the one for the current theme, so the header switch swaps them too. */}
         {tone === "default" ? (
@@ -73,6 +124,7 @@ export function Logo({ tone = "default", height = 56, intro = false }: Props) {
             alt=""
             className={`${styles.img} ${styles.imgDark}`}
             decoding="async"
+            draggable={false}
           />
         ) : null}
         <span className={styles.sheen} aria-hidden="true" />

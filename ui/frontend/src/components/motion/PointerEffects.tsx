@@ -10,6 +10,7 @@ const MAX_PULL_PX = 6;
  * - [data-spotlight] cards get --mx / --my for the radial spotlight and --tilt-x / --tilt-y for their emoji;
  * - [data-magnetic] buttons drift toward the pointer by up to 6 px.
  * Off under reduced motion. Writes CSS variables only, once per animation frame.
+ * Separately, for every pointer type: [data-ripple] buttons get a press ripple from the press point.
  */
 export function PointerEffects() {
   useEffect(() => {
@@ -83,6 +84,27 @@ export function PointerEffects() {
       document.documentElement.removeEventListener("pointerleave", onLeave);
       if (frame) window.cancelAnimationFrame(frame);
     };
+  }, []);
+
+  // Press ripple on [data-ripple] buttons, for every pointer type (it is the tap feedback on phones).
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onDown = (event: PointerEvent) => {
+      if (reduce.matches || event.button !== 0) return;
+      const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-ripple]") : null;
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      // Big enough to reach the farthest corner from the press point.
+      const radius = Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y));
+      target.style.setProperty("--rx", `${x.toFixed(1)}px`);
+      target.style.setProperty("--ry", `${y.toFixed(1)}px`);
+      target.style.setProperty("--rs", `${(radius * 2).toFixed(1)}px`);
+      target.dataset.ripple = target.dataset.ripple === "a" ? "b" : "a";
+    };
+    document.addEventListener("pointerdown", onDown, { passive: true });
+    return () => document.removeEventListener("pointerdown", onDown);
   }, []);
 
   return null;

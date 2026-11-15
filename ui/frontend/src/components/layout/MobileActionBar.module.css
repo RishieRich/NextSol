@@ -15,8 +15,9 @@
     border-radius: var(--ns-r-md);
     background: var(--ns-header-glass);
     box-shadow: var(--ns-shadow-lg);
-    backdrop-filter: blur(14px);
+    /* Prefixed first: the CSS minifier keeps only the last of the pair, and Chrome reads only the unprefixed one. */
     -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
   }
 
   :global(.motion-ready) .bar {

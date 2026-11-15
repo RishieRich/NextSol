@@ -10,25 +10,29 @@ Niket's own site, on his own URLs, in his logo and blue, built to plain static H
 - Motion: a circuit-network hero grown from the logo, cascading reveals, ERP and cloud product sliders, counters and rings, a client marquee, a mega-menu, spotlight cards, and 3D emoji (Microsoft Fluent, MIT). Calm under reduced motion; fully readable without JavaScript.
 - Tools that sell: an animated invoice (plain vs customised Tally), a customisation explorer, a Silver-or-Gold advisor, a quick guide that recommends software, and an enquiry form. All three hand off to WhatsApp with the visitor's need already written.
 - A light / dark switch in the header (moon and sun). It follows the phone or computer setting until the visitor chooses, then remembers the choice.
+- Interaction pass (2026-11-15): the logo always answers a click or tap (it presses in and its circuit nodes light up). On the home page it glides back to the top, clears any `#hash` and closes an open menu; from any other page, header or footer, it lands at the top of the home page instead of scrolling the old page up while the new one fades in. Pressing the hero's N sends light down every trace to the product chips. Also: press ripple on every button, a reading-progress ring on back-to-top, the logo's navy-to-sky gradient on the headline's last word, a faint dot grid behind the hero network, scroll depth on the network, a gradient scroll-progress line, a lit top edge on the footer and 240 to 184 px less blank space above it, and the header logo vertically centred (it sat 6 px high and touched the top once the bar shrank).
+- Fixed: the frosted-glass header, hero chips and phone action bar never blurred in any build. The CSS minifier kept only the `-webkit-` half of each `backdrop-filter` pair, which Chrome ignores; the unprefixed declaration now comes last. Cards keep no blur on purpose (flat backgrounds, GPU cost).
 - Motion polish pass: sequenced hero supporting copy, coordinated section-label/intro/aside reveals, soft panel entrances for sliders and interactive sections, staggered contact details, a founder-photo reveal, and matched hover/focus feedback on product cards. The new effects preserve reduced-motion and no-JavaScript behavior.
 
 ## Verified
 
 Run on 2026-11-01 against the static build, Chrome, 1440 px and 390 px.
 
+Interaction pass verified on 2026-11-15 against the static build: `npm --prefix ui/frontend run check` passed (lint clean, 97 tests, 22 static pages); `node scripts/contrast.mjs` passed, now including the headline gradient's two ends as large text (lowest 3.34:1 against 3:1); `python scripts/smoke.py http://localhost:4173` passed 16 of 16, including the new "logo clicks" (mouse and touch, home with menu open, header and footer elsewhere) and "hero surge" journeys. First Load JS 252 to 271 kB per route (was 253 to 269). Lighthouse mobile on `/`, same local server, two runs each, before and after: LCP 2.57 to 2.60 s both, CLS 0.004 both, TBT 255 to 490 ms before and 147 to 162 ms after (local TBT is noisy, read as no regression). Looked at by screenshot at 1440 px and 390 px in light and dark.
+
 Motion polish re-verified on 2026-11-15: `npm --prefix ui/frontend run check` passed with lint clean, 97 tests, and all 22 static pages generated; `python scripts/smoke.py http://localhost:4173` passed every journey, including reduced motion and JavaScript-off visibility. The refreshed home hero was also checked at 1440 x 900 and 390 x 844 in light and dark.
 
 | Check | Command | Result |
 | --- | --- | --- |
 | Typecheck, lint, unit tests, static build | `npm --prefix ui/frontend run check` | Pass; lint 0 problems; 97 tests |
-| End-to-end journeys | `python scripts/smoke.py http://localhost:4173` | 14 of 14 pass |
-| Contrast, light and dark | `node scripts/contrast.mjs` | 52 pairs pass |
+| End-to-end journeys | `python scripts/smoke.py http://localhost:4173` | 16 of 16 pass (logo clicks and hero surge added 2026-11-15) |
+| Contrast, light and dark | `node scripts/contrast.mjs` | 56 pairs pass |
 | Lighthouse, mobile, live `/` | `npx lighthouse https://next-solutions-web.vercel.app/ --form-factor=mobile` | Perf 94, A11y 100, BP 100, SEO 100; LCP 1.4 s, CLS 0.004, TBT 270 ms |
 | Lighthouse, mobile, live `/tally-prime/` | same | Perf 96, A11y 100, BP 96, SEO 100; LCP 1.3 s, CLS 0.015, TBT 212 ms |
 | First Load JS per route | gzip of the scripts in each built page | 253 to 269 kB (budget 200) |
 | Smoke against production | `python scripts/smoke.py https://next-solutions-web.vercel.app` | 14 of 14 pass |
 
-Smoke journeys: 16 routes scrolled through with one h1 and no console errors; `/tally/` is 404; ERP slider by button and ArrowRight; mega-menu by keyboard and Escape; services filter; quick guide to TallyPrime Gold and WhatsApp; invoice toggle; customisation explorer by mouse and arrow keys; licence advisor paths; enquiry form errors then WhatsApp; mobile menu; light/dark switch (persists across pages, swaps logo and browser colour, phone starts dark from the system); reduced motion (no autoplay, all text visible); JavaScript off (all text visible).
+Smoke journeys: 16 routes scrolled through with one h1 and no console errors; `/tally/` is 404; ERP slider by button and ArrowRight; mega-menu by keyboard and Escape; services filter; quick guide to TallyPrime Gold and WhatsApp; invoice toggle; customisation explorer by mouse and arrow keys; licence advisor paths; enquiry form errors then WhatsApp; mobile menu; logo clicks (home glides to the top and closes the menu, header and footer logos elsewhere land at the top, mouse and touch); hero N surge; light/dark switch (persists across pages, swaps logo and browser colour, phone starts dark from the system); reduced motion (no autoplay, all text visible); JavaScript off (all text visible).
 
 Looked at by screenshot: every page at 1440 px and 390 px in light and dark.
 

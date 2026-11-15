@@ -63,6 +63,7 @@
   fill: var(--ns-surface);
   stroke: var(--ns-logo-sky);
   stroke-width: 2;
+  transition: fill var(--ns-dur-2) var(--ns-ease);
 }
 
 /* Sky-blue light pulse: a short dash that travels the trace, invisible at rest */
@@ -76,19 +77,36 @@
   filter: drop-shadow(0 0 4px var(--ns-logo-sky-glow));
 }
 
-/* Central chip carrying the logo's N */
+/* Central chip carrying the logo's N. A button: pressing it sends a surge through the network. */
 .core {
   position: absolute;
   left: 39%;
   top: 49.26%;
+  z-index: 1;
   width: 22%;
   aspect-ratio: 1;
   display: grid;
   place-items: center;
+  padding: 0;
   border-radius: 22%;
   background: var(--ns-surface);
   border: 1px solid var(--ns-line);
   box-shadow: var(--ns-shadow-lg);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    translate 700ms var(--ns-ease-out),
+    border-color var(--ns-dur-2) var(--ns-ease),
+    box-shadow var(--ns-dur-2) var(--ns-ease);
+}
+
+.core:hover,
+.core:focus-visible,
+.network[data-surging] .core {
+  border-color: var(--ns-logo-sky);
+  box-shadow: var(--ns-shadow-lg), var(--ns-shadow-blue);
 }
 
 .coreRing {
@@ -97,21 +115,166 @@
   border-radius: 26%;
   border: 1.5px dashed var(--ns-logo-sky);
   opacity: 0.45;
+  transition:
+    opacity var(--ns-dur-2) var(--ns-ease),
+    scale var(--ns-dur-3) var(--ns-ease-spring);
+}
+
+.core:hover .coreRing,
+.core:focus-visible .coreRing {
+  opacity: 0.9;
+  scale: 1.05;
 }
 
 .coreMark {
   width: auto;
   height: 72%;
+  user-select: none;
+  transition: scale var(--ns-dur-2) var(--ns-ease-spring);
 }
 
+.core:hover .coreMark {
+  scale: 1.04;
+}
+
+.core:active .coreMark {
+  scale: 0.9;
+  transition-duration: var(--ns-dur-1);
+}
+
+/* "Light it up": tells mouse users the N can be pressed. Touch screens never see it. */
+.coreHint {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 14px);
+  padding: 4px 10px;
+  border-radius: var(--ns-r-pill);
+  background: var(--ns-navy);
+  color: var(--ns-navy-text);
+  font-size: var(--ns-fs-xs);
+  font-weight: 650;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -4px);
+  pointer-events: none;
+  transition:
+    opacity var(--ns-dur-2) var(--ns-ease),
+    transform var(--ns-dur-2) var(--ns-ease-out);
+}
+
+@media (hover: hover) {
+  .core:hover .coreHint,
+  .core:focus-visible .coreHint {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Rings that ripple out from the N on a press */
+.ripples {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--ns-logo-sky);
+  border-radius: 22%;
+  opacity: 0;
+  animation: ripple 900ms var(--ns-ease-out) both;
+}
+
+.ripple + .ripple {
+  animation-delay: 180ms;
+}
+
+@keyframes ripple {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* The surge: a bright comet races from the N to every chip and branch end, then the chips bump as it arrives */
+.surgeTrace {
+  fill: none;
+  stroke: var(--ns-logo-sky);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.35 2;
+  stroke-dashoffset: 0.35;
+  filter: drop-shadow(0 0 6px var(--ns-logo-sky-glow));
+  animation: surge 850ms var(--ns-ease-out) calc(var(--i) * 30ms) both;
+}
+
+@keyframes surge {
+  from {
+    stroke-dashoffset: 0.35;
+  }
+  to {
+    stroke-dashoffset: -1.05;
+  }
+}
+
+.network[data-surging] .trace {
+  stroke: var(--ns-logo-sky);
+}
+
+.network[data-surging] .node {
+  fill: var(--ns-logo-sky);
+}
+
+.network[data-surging] .chipFace {
+  border-color: var(--ns-logo-sky);
+  transition-delay: calc(360ms + var(--i) * 40ms);
+}
+
+/* Two names for the same bump, alternated per press, so a quick second press restarts it */
+.chipItem[data-surge="0"] .chip {
+  animation: bump-a 620ms var(--ns-ease-spring) calc(360ms + var(--i) * 40ms) both;
+}
+
+.chipItem[data-surge="1"] .chip {
+  animation: bump-b 620ms var(--ns-ease-spring) calc(360ms + var(--i) * 40ms) both;
+}
+
+@keyframes bump-a {
+  0%,
+  100% {
+    scale: 1;
+  }
+  40% {
+    scale: 1.12;
+  }
+}
+
+@keyframes bump-b {
+  0%,
+  100% {
+    scale: 1;
+  }
+  40% {
+    scale: 1.12;
+  }
+}
+
+/* The chip layer spans the whole board; only the chips themselves take the pointer, so the N stays pressable. */
 .chips {
   position: absolute;
   inset: 0;
   list-style: none;
+  pointer-events: none;
 }
 
 .chipItem {
   position: absolute;
+  pointer-events: auto;
   width: 17%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
@@ -139,8 +302,9 @@
   background: var(--ns-glass);
   border: 1px solid var(--ns-glass-line);
   box-shadow: var(--ns-shadow-md);
-  backdrop-filter: blur(8px);
+  /* Prefixed first: the CSS minifier keeps only the last of the pair, and Chrome reads only the unprefixed one. */
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   transition:
     border-color var(--ns-dur-2) var(--ns-ease),
     box-shadow var(--ns-dur-2) var(--ns-ease);
@@ -289,8 +453,14 @@
     translate: none;
   }
 
-  .pulse {
+  .pulse,
+  .surge,
+  .ripples {
     display: none;
+  }
+
+  .chipItem[data-surge] .chip {
+    animation: none !important;
   }
 
   .trace,

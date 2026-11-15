@@ -176,8 +176,8 @@ ol {
   border-radius: var(--ns-r-lg);
   background: var(--ns-glass);
   box-shadow: var(--ns-shadow-sm);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* No backdrop blur: cards sit on flat sections, where blur looks the same and costs GPU on every scroll.
+     (The build never shipped it here anyway: the minifier dropped the unprefixed half of the pair.) */
   transition:
     border-color var(--ns-dur-2) var(--ns-ease),
     box-shadow var(--ns-dur-2) var(--ns-ease),

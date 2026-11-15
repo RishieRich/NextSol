@@ -23,7 +23,9 @@ Nothing else: no GSAP, no smooth-scroll hijacking, no Three.js, no Lottie, no pa
 - Reduced motion (`MotionConfig reducedMotion="user"` plus the CSS rule in `theme.css`) turns off autoplay, parallax, float, pulses and tilt, and makes reveals instant. `navigator.connection.saveData` adds `save-data`, which turns off decorative loops.
 - Animate only `transform`, `opacity`, `filter` (small blur), `clip-path` and `stroke-dashoffset` / `pathLength`.
 - At most one decorative loop is visible per viewport besides the logo marquee. `LoopController` pauses every `[data-loop]` element when it is off-screen or the tab is hidden.
-- `PointerEffects` is the only pointer listener for spotlight, tilt and magnetic pull, on devices with a fine pointer and hover only.
+- `PointerEffects` is the only pointer listener for spotlight, tilt and magnetic pull, on devices with a fine pointer and hover only. It also owns the press ripple on buttons (`[data-ripple]`), which runs for every pointer type because it is the tap feedback on phones.
+- One-shot press feedback that must layer over a running CSS animation without restarting it (the logo's light-up on click) uses the browser's own Web Animations API (`element.animate`) with the motion tokens. No library; nothing loops.
+- Scrolling to the top (logo on the home page, back-to-top) goes through `lib/scroll.ts`: a timed glide under a second, cancelled by any wheel, touch or key, instant under reduced motion. Route changes jump to the top (`data-scroll-behavior="smooth"` on `<html>`, Next 16).
 
 ## Consequences
 

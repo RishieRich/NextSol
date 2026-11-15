@@ -23,8 +23,14 @@ function classes(variant: Variant, size: Size, className?: string) {
   return [styles.button, styles[variant], styles[size], className].filter(Boolean).join(" ");
 }
 
-/** Primary buttons get the magnetic pull (PointerEffects) and the shine sweep. */
-const magnetic = (variant: Variant) => (variant === "primary" || variant === "onDark" ? { "data-magnetic": "" } : {});
+/**
+ * Every button gets the press ripple (PointerEffects writes data-ripple on press);
+ * primary buttons also get the magnetic pull and the shine sweep.
+ */
+const magnetic = (variant: Variant) => ({
+  "data-ripple": "",
+  ...(variant === "primary" || variant === "onDark" ? { "data-magnetic": "" } : {}),
+});
 
 /** Internal routes use Next's Link; tel:, wa.me and other external links use a plain anchor. */
 export function ButtonLink({ href, children, variant = "primary", size = "md", icon, iconEnd, className, ariaLabel }: ButtonLinkProps) {

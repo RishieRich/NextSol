@@ -18,6 +18,19 @@
   pointer-events: none;
 }
 
+/* A circuit board's dot grid behind the network, fading out toward the copy */
+.dots {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(circle, var(--ns-line-strong) 1.1px, transparent 1.6px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(48% 62% at 76% 46%, var(--ns-text), transparent 72%);
+  mask-image: radial-gradient(48% 62% at 76% 46%, var(--ns-text), transparent 72%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
@@ -74,6 +87,24 @@
 
 .dot {
   display: inline-block;
+}
+
+/* The last word: the gradient of the logo's N (navy into sky), on the glyphs only */
+.accent {
+  background: linear-gradient(100deg, var(--ns-logo-navy) 5%, var(--ns-blue) 50%, var(--ns-logo-sky) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Keeps the descenders inside the painted box */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+@media (forced-colors: active) {
+  .accent {
+    background: none;
+    color: CanvasText;
+  }
 }
 
 /* The headline sharpens in from a blur. Opacity never starts at 0, so it is painted (and counted) at once. */
@@ -135,6 +166,11 @@
 @media (max-width: 960px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .dots {
+    -webkit-mask-image: radial-gradient(60% 34% at 50% 78%, var(--ns-text), transparent 72%);
+    mask-image: radial-gradient(60% 34% at 50% 78%, var(--ns-text), transparent 72%);
   }
 
   .visual {
