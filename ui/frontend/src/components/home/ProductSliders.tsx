@@ -1,4 +1,5 @@
 import { Slider } from "@/components/motion/Slider";
+import { Reveal } from "@/components/motion/Reveal";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Product } from "@/content/products";
@@ -19,11 +20,13 @@ export function ProductSlider({ id, label, title, intro, products, tone = "defau
     <section className={`${styles.section} ${tone === "tint" ? styles.tint : ""}`} aria-labelledby={id}>
       <div className="container">
         <SectionHeader id={id} label={label} title={title} intro={intro} dot />
-        <Slider label={title}>
-          {products.map((product, index) => (
-            <ProductCard key={product.slug} product={product} featured={index === 0} />
-          ))}
-        </Slider>
+        <Reveal variant="soft">
+          <Slider label={title}>
+            {products.map((product, index) => (
+              <ProductCard key={product.slug} product={product} featured={index === 0} />
+            ))}
+          </Slider>
+        </Reveal>
       </div>
     </section>
   );

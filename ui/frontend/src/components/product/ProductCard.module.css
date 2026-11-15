@@ -14,6 +14,10 @@
   margin-bottom: 4px;
 }
 
+.emoji {
+  transition: transform var(--ns-dur-2) var(--ns-ease-spring);
+}
+
 .vendor {
   padding: 4px 10px;
   border-radius: var(--ns-r-pill);
@@ -21,6 +25,20 @@
   color: var(--ns-text-2);
   font-size: var(--ns-fs-xs);
   font-weight: 600;
+  transition:
+    background-color var(--ns-dur-2) var(--ns-ease),
+    color var(--ns-dur-2) var(--ns-ease);
+}
+
+.card:hover .emoji,
+.card:focus-within .emoji {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.card:hover .vendor,
+.card:focus-within .vendor {
+  background: var(--ns-blue-soft);
+  color: var(--ns-blue-soft-text);
 }
 
 .name {
@@ -116,4 +134,11 @@
 .referral {
   position: relative;
   z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .emoji,
+  .card:focus-within .emoji {
+    transform: none;
+  }
 }

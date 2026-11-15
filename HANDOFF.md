@@ -1,6 +1,6 @@
 # Handoff: Next Solutions Website
 
-Last updated 2026-11-01.
+Last updated 2026-11-15.
 
 ## Delivered
 
@@ -10,10 +10,13 @@ Niket's own site, on his own URLs, in his logo and blue, built to plain static H
 - Motion: a circuit-network hero grown from the logo, cascading reveals, ERP and cloud product sliders, counters and rings, a client marquee, a mega-menu, spotlight cards, and 3D emoji (Microsoft Fluent, MIT). Calm under reduced motion; fully readable without JavaScript.
 - Tools that sell: an animated invoice (plain vs customised Tally), a customisation explorer, a Silver-or-Gold advisor, a quick guide that recommends software, and an enquiry form. All three hand off to WhatsApp with the visitor's need already written.
 - A light / dark switch in the header (moon and sun). It follows the phone or computer setting until the visitor chooses, then remembers the choice.
+- Motion polish pass: sequenced hero supporting copy, coordinated section-label/intro/aside reveals, soft panel entrances for sliders and interactive sections, staggered contact details, a founder-photo reveal, and matched hover/focus feedback on product cards. The new effects preserve reduced-motion and no-JavaScript behavior.
 
 ## Verified
 
 Run on 2026-11-01 against the static build, Chrome, 1440 px and 390 px.
+
+Motion polish re-verified on 2026-11-15: `npm --prefix ui/frontend run check` passed with lint clean, 97 tests, and all 22 static pages generated; `python scripts/smoke.py http://localhost:4173` passed every journey, including reduced motion and JavaScript-off visibility. The refreshed home hero was also checked at 1440 x 900 and 390 x 844 in light and dark.
 
 | Check | Command | Result |
 | --- | --- | --- |

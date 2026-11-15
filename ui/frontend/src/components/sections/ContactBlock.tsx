@@ -1,3 +1,4 @@
+import { Cascade, CascadeItem } from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -24,8 +25,8 @@ export function ContactBlock({ withHeader = true }: { withHeader?: boolean }) {
           />
         ) : null}
 
-        <div className={styles.grid}>
-          <aside className={styles.details} aria-label="Contact details">
+        <Cascade as="div" className={styles.grid}>
+          <CascadeItem as="aside" className={styles.details} aria-label="Contact details">
             <ul className={styles.list}>
               <li>
                 <Icon name="phone" />
@@ -94,12 +95,12 @@ export function ContactBlock({ withHeader = true }: { withHeader?: boolean }) {
                 </div>
               </li>
             </ul>
-          </aside>
+          </CascadeItem>
 
-          <div id="enquiry" className={styles.formCard}>
+          <CascadeItem as="div" id="enquiry" className={styles.formCard}>
             <EnquiryForm />
-          </div>
-        </div>
+          </CascadeItem>
+        </Cascade>
       </div>
     </section>
   );

@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { m } from "motion/react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 
-import { isMotionReady } from "@/lib/useReveal";
+import { panelReveal } from "@/lib/motion";
+import { isMotionReady, useReveal } from "@/lib/useReveal";
 
 /**
  * Sets data-play="true" the first time the element is on screen, so CSS can play a one-off demo
@@ -14,13 +16,15 @@ export function PlayOnView({
   className,
   style,
   as: Tag = "div",
+  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
   as?: "div" | "article" | "li";
+  delay?: number;
 }) {
-  const ref = useRef<HTMLElement | null>(null);
+  const { ref, state } = useReveal<HTMLElement>(0.2);
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
@@ -37,11 +41,23 @@ export function PlayOnView({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [ref]);
+
+  const Component = m[Tag] as typeof m.div;
 
   return (
-    <Tag ref={ref as React.Ref<HTMLDivElement & HTMLLIElement>} className={className} style={style} data-play={play} data-spotlight="">
+    <Component
+      ref={ref as React.Ref<HTMLDivElement>}
+      className={className}
+      style={style}
+      variants={panelReveal}
+      custom={delay}
+      initial={false}
+      animate={state}
+      data-play={play}
+      data-spotlight=""
+    >
       {children}
-    </Tag>
+    </Component>
   );
 }

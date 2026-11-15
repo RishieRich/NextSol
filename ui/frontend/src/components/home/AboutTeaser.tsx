@@ -22,20 +22,22 @@ export function AboutTeaser() {
   return (
     <section className={styles.section} aria-labelledby="about-teaser-title">
       <div className={`container ${styles.grid}`}>
-        <div ref={ref} className={styles.photoWrap}>
-          <m.div className={styles.photo} style={reduce ? undefined : { y }}>
-            <Image
-              src={founderPhoto.src}
-              width={founderPhoto.width}
-              height={founderPhoto.height}
-              alt={`${business.founder}, founder of ${business.name}`}
-              sizes="(max-width: 860px) 80vw, 440px"
-            />
-          </m.div>
-          <span className={styles.badge}>
-            <strong>{business.foundedYear}</strong> started in {business.address.city}
-          </span>
-        </div>
+        <Reveal className={styles.photoReveal} variant="soft">
+          <div ref={ref} className={styles.photoWrap}>
+            <m.div className={styles.photo} style={reduce ? undefined : { y }}>
+              <Image
+                src={founderPhoto.src}
+                width={founderPhoto.width}
+                height={founderPhoto.height}
+                alt={`${business.founder}, founder of ${business.name}`}
+                sizes="(max-width: 860px) 80vw, 440px"
+              />
+            </m.div>
+            <span className={styles.badge}>
+              <strong>{business.foundedYear}</strong> started in {business.address.city}
+            </span>
+          </div>
+        </Reveal>
         <Reveal className={styles.copy}>
           <SectionHeader id="about-teaser-title" label={aboutTeaser.label} title={aboutTeaser.title} dot />
           {aboutTeaser.body.map((line) => (

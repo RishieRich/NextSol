@@ -13,6 +13,24 @@
   color: var(--ns-navy-text-2);
 }
 
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ns-navy-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ns-navy-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(circle at 100% 0%, black, transparent 62%);
+  mask-image: radial-gradient(circle at 100% 0%, black, transparent 62%);
+  pointer-events: none;
+}
+
+.band > * {
+  position: relative;
+}
+
 .numbers {
   display: flex;
   flex-wrap: wrap;

@@ -206,17 +206,20 @@ ol {
 }
 
 @media (hover: hover) {
-  .fx-card:hover {
+  .fx-card:hover,
+  .fx-card:focus-within {
     border-color: var(--ns-blue);
     box-shadow: var(--ns-shadow-md);
     transform: translateY(-4px);
   }
 
-  .fx-card:hover::before {
+  .fx-card:hover::before,
+  .fx-card:focus-within::before {
     opacity: 1;
   }
 
-  .motion-ready .fx-card:hover::after {
+  .motion-ready .fx-card:hover::after,
+  .motion-ready .fx-card:focus-within::after {
     transform: translateX(70%);
     transition: transform 900ms var(--ns-ease-out);
   }

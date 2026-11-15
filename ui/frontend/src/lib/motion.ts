@@ -33,12 +33,35 @@ const instant: Transition = { duration: 0 };
 
 export const fadeUp: Variants = {
   hidden: { opacity: 0, y: revealY, transition: instant },
-  show: { opacity: 1, y: 0, transition: { duration: dur3, ease: easeOut } },
+  show: (delay: number = 0) => ({ opacity: 1, y: 0, transition: { duration: dur3, delay, ease: easeOut } }),
 };
 
 export const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.6, transition: instant },
-  show: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 380, damping: 22 } },
+  show: (delay: number = 0) => ({ opacity: 1, scale: 1, transition: { type: "spring", stiffness: 380, damping: 22, delay } }),
+};
+
+/** A restrained reveal for large cards and panels: slight depth, then a clean settle. */
+export const softReveal: Variants = {
+  hidden: { opacity: 0, y: revealY, scale: 0.985, filter: "blur(6px)", transition: instant },
+  show: (delay: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: dur4, delay, ease: easeOut },
+  }),
+};
+
+/** Reveals an interactive card without owning transform, so its CSS hover lift remains available. */
+export const panelReveal: Variants = {
+  hidden: { opacity: 0, filter: "blur(6px)", clipPath: "inset(0 0 12% 0)", transition: instant },
+  show: (delay: number = 0) => ({
+    opacity: 1,
+    filter: "blur(0px)",
+    clipPath: "inset(0 0 0% 0)",
+    transition: { duration: dur4, delay, ease: easeOut },
+  }),
 };
 
 export const cascade: { container: Variants; item: Variants } = {

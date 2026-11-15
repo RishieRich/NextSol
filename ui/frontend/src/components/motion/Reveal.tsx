@@ -3,25 +3,28 @@
 import { m } from "motion/react";
 import type { CSSProperties, ReactNode } from "react";
 
-import { cascade, fadeUp, scaleIn } from "@/lib/motion";
+import { cascade, fadeUp, scaleIn, softReveal } from "@/lib/motion";
 import { useReveal } from "@/lib/useReveal";
 
-type Tag = "div" | "section" | "ul" | "ol" | "li" | "article" | "p" | "figure" | "dl";
+type Tag = "div" | "section" | "ul" | "ol" | "li" | "article" | "aside" | "p" | "figure" | "dl";
 
 type RevealProps = {
   children: ReactNode;
   as?: Tag;
   className?: string;
   style?: CSSProperties;
-  variant?: "fadeUp" | "scaleIn";
+  variant?: "fadeUp" | "scaleIn" | "soft";
+  /** Seconds to wait after the element enters view; use motionTokens for sequences. */
+  delay?: number;
   id?: string;
   "aria-label"?: string;
+  "aria-hidden"?: boolean;
 };
 
-const variantsFor = { fadeUp, scaleIn };
+const variantsFor = { fadeUp, scaleIn, soft: softReveal };
 
 /** One element that fades up the first time it scrolls into view. Visible without JavaScript. */
-export function Reveal({ children, as = "div", className, style, variant = "fadeUp", ...rest }: RevealProps) {
+export function Reveal({ children, as = "div", className, style, variant = "fadeUp", delay = 0, ...rest }: RevealProps) {
   const { ref, state } = useReveal<HTMLElement>();
   const Component = m[as] as typeof m.div;
   return (
@@ -30,6 +33,7 @@ export function Reveal({ children, as = "div", className, style, variant = "fade
       className={className}
       style={style}
       variants={variantsFor[variant]}
+      custom={delay}
       initial={false}
       animate={state}
       {...rest}
@@ -65,18 +69,27 @@ export function CascadeItem({
   style,
   id,
   spotlight = false,
+  "aria-label": ariaLabel,
 }: {
   children: ReactNode;
   as?: Tag;
   className?: string;
   style?: CSSProperties;
   id?: string;
+  "aria-label"?: string;
   /** Pointer spotlight and emoji tilt (PointerEffects), for .fx-card items. */
   spotlight?: boolean;
 }) {
   const Component = m[as] as typeof m.li;
   return (
-    <Component className={className} style={style} variants={cascade.item} id={id} data-spotlight={spotlight ? "" : undefined}>
+    <Component
+      className={className}
+      style={style}
+      variants={cascade.item}
+      id={id}
+      aria-label={ariaLabel}
+      data-spotlight={spotlight ? "" : undefined}
+    >
       {children}
     </Component>
   );

@@ -31,6 +31,38 @@
   gap: 26px;
 }
 
+/* The supporting copy follows the headline in one calm load sequence. Text never starts fully hidden. */
+:global(.motion-ready) .ticker,
+:global(.motion-ready) .lede,
+:global(.motion-ready) .actions,
+:global(.motion-ready) .stats {
+  animation: support-in var(--ns-dur-3) var(--ns-ease-out) both;
+}
+
+:global(.motion-ready) .ticker {
+  animation-delay: var(--ns-dur-1);
+}
+
+:global(.motion-ready) .lede {
+  animation-delay: var(--ns-dur-2);
+}
+
+:global(.motion-ready) .actions {
+  animation-delay: calc(var(--ns-dur-2) + var(--ns-stagger));
+}
+
+:global(.motion-ready) .stats {
+  animation-delay: calc(var(--ns-dur-3) + var(--ns-stagger));
+}
+
+@keyframes support-in {
+  from {
+    opacity: 0.55;
+    filter: blur(6px);
+    transform: translateY(12px);
+  }
+}
+
 .title {
   max-width: 14ch;
   font-size: clamp(2.5rem, 1.4rem + 4.2vw, 4.5rem);
@@ -121,7 +153,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .word,
-  .dot {
+  .dot,
+  .ticker,
+  .lede,
+  .actions,
+  .stats {
     animation: none !important;
   }
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { PlayOnView } from "@/components/motion/PlayOnView";
+import { Reveal } from "@/components/motion/Reveal";
 import { Emoji } from "@/components/ui/Emoji";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -9,6 +10,7 @@ import { insights } from "@/content/home";
 import { sampleBarcodeScan, sampleGstSale } from "@/content/samples";
 import { computeGst } from "@/domain/gst";
 import { formatPaise, formatPercent } from "@/domain/format";
+import { motionTokens } from "@/lib/motion";
 import styles from "./Insights.module.css";
 
 /** Track GST demo: a sample sale at the sample item's GST rate, split with the same domain code as the free GST calculator. */
@@ -50,7 +52,7 @@ export function Insights() {
           ) : null}
 
           {track ? (
-            <PlayOnView as="article" className={`fx-card ${styles.tile}`}>
+            <PlayOnView as="article" className={`fx-card ${styles.tile}`} delay={motionTokens.stagger}>
               <div className={styles.tileText}>
                 <Emoji name={track.emoji} size={56} />
                 <h3>{track.title}</h3>
@@ -78,7 +80,7 @@ export function Insights() {
           ) : null}
 
           {integration ? (
-            <PlayOnView as="article" className={`fx-card ${styles.tile}`}>
+            <PlayOnView as="article" className={`fx-card ${styles.tile}`} delay={motionTokens.stagger * 2}>
               <div className={styles.tileText}>
                 <Emoji name={integration.emoji} size={56} />
                 <h3>{integration.title}</h3>
@@ -101,13 +103,15 @@ export function Insights() {
             </PlayOnView>
           ) : null}
 
-          <Link href="/tally-prime/#customisation" className={`fx-card ${styles.tile} ${styles.cta}`} data-spotlight="">
-            <Emoji name="customisation" size={56} />
-            <span className={styles.ctaTitle}>See what we can customise in Tally</span>
-            <span className={styles.ctaLink}>
-              Open the customisation explorer <Icon name="arrowRight" size={16} />
-            </span>
-          </Link>
+          <Reveal className={styles.ctaWrap} variant="soft" delay={motionTokens.stagger * 3}>
+            <Link href="/tally-prime/#customisation" className={`fx-card ${styles.tile} ${styles.cta}`} data-spotlight="">
+              <Emoji name="customisation" size={56} />
+              <span className={styles.ctaTitle}>See what we can customise in Tally</span>
+              <span className={styles.ctaLink}>
+                Open the customisation explorer <Icon name="arrowRight" size={16} />
+              </span>
+            </Link>
+          </Reveal>
         </div>
       </div>
     </section>

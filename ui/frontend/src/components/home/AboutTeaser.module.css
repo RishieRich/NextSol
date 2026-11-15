@@ -9,9 +9,12 @@
   align-items: center;
 }
 
+.photoReveal {
+  max-width: 440px;
+}
+
 .photoWrap {
   position: relative;
-  max-width: 440px;
 }
 
 .photo {
@@ -66,7 +69,7 @@
     grid-template-columns: 1fr;
   }
 
-  .photoWrap {
+  .photoReveal {
     max-width: 360px;
   }
 

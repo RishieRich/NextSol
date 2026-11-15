@@ -24,7 +24,7 @@ export function ProductCard({ product, headingLevel = 3, featured = false }: { p
   return (
     <article className={`fx-card ${featured ? "fx-border" : ""} ${styles.card}`} data-spotlight="" data-loop={featured ? "" : undefined}>
       <div className={styles.top}>
-        <Emoji name={product.emoji} size={72} />
+        <Emoji name={product.emoji} size={72} className={styles.emoji} />
         {product.vendor ? <span className={styles.vendor}>{product.kind === "service" ? "Service" : `By ${product.vendor}`}</span> : null}
       </div>
       <Heading className={styles.name}>{product.name}</Heading>

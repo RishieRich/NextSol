@@ -27,7 +27,9 @@ export function Hero() {
       <div className={styles.grain} aria-hidden="true" />
       <div className={`container ${styles.grid}`}>
         <div className={styles.copy}>
-          <Ticker lead={hero.tickerLead} items={hero.ticker} />
+          <div className={styles.ticker}>
+            <Ticker lead={hero.tickerLead} items={hero.ticker} />
+          </div>
 
           <h1 id="hero-title" className={styles.title}>
             {words.map((word, index) => (

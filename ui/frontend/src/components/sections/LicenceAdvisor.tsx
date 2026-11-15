@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 
+import { Reveal } from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { business } from "@/content/business";
@@ -79,7 +80,7 @@ export function LicenceAdvisor() {
           intro="Both editions have the same features. What changes is how many people can work in Tally at once."
         />
 
-        <div className={styles.card}>
+        <Reveal className={styles.card} variant="soft">
           <form className={styles.questions} onSubmit={(event) => event.preventDefault()}>
             <Choice
               legend="How many people need Tally open at the same time?"
@@ -137,7 +138,7 @@ export function LicenceAdvisor() {
               </ButtonLink>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

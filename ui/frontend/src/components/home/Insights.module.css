@@ -320,12 +320,19 @@
 
 /* ---------- Link tile ---------- */
 .cta {
-  grid-column: span 2;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   color: var(--ns-text);
   text-decoration: none;
+}
+
+.ctaWrap {
+  grid-column: span 2;
+}
+
+.ctaWrap > * {
+  height: 100%;
 }
 
 .ctaTitle {
@@ -352,7 +359,7 @@
   }
 
   .tileWide,
-  .cta {
+  .ctaWrap {
     grid-column: 1 / -1;
   }
 }

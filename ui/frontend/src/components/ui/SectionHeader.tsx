@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 
+import { Reveal } from "@/components/motion/Reveal";
 import { WordReveal } from "@/components/motion/WordReveal";
+import { motionTokens } from "@/lib/motion";
 import styles from "./SectionHeader.module.css";
 
 type Props = {
@@ -26,18 +28,26 @@ export function SectionHeader({ id, title, label, intro, tone = "default", align
     <div className={className}>
       <div className={styles.text}>
         {label ? (
-          <p className={styles.label} aria-hidden="true">
+          <Reveal as="p" className={styles.label} aria-hidden={true}>
             {"// "}
             {label}
             {" //"}
-          </p>
+          </Reveal>
         ) : null}
         <h2 id={id} className={styles.title}>
           <WordReveal text={title} dot={dot} dotClassName="ns-dot" />
         </h2>
-        {intro ? <p className={styles.intro}>{intro}</p> : null}
+        {intro ? (
+          <Reveal as="p" className={styles.intro} delay={motionTokens.stagger}>
+            {intro}
+          </Reveal>
+        ) : null}
       </div>
-      {aside ? <div className={styles.aside}>{aside}</div> : null}
+      {aside ? (
+        <Reveal className={styles.aside} delay={motionTokens.stagger * 2}>
+          {aside}
+        </Reveal>
+      ) : null}
     </div>
   );
 }
